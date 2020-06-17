@@ -22,7 +22,6 @@ import io.jsonwebtoken.Jwts;
 import static io.jsonwebtoken.Jwts.parser;
 import static java.util.Date.from;
 
-
 @Service
 public class JWTProvider {
 
