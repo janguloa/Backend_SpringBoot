@@ -1,5 +1,6 @@
 package com.seguridad;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -26,15 +27,18 @@ import static java.util.Date.from;
 public class JWTProvider {
 
     private KeyStore keyStore;
-
+    
     @PostConstruct
     public void init() {
         try {
-            keyStore = KeyStore.getInstance("JKS");
+            keyStore = KeyStore.getInstance("jks");
             InputStream resourceAsStream = getClass().getResourceAsStream("/springblog.jks");
+            System.out.println("secret".toCharArray());
             keyStore.load(resourceAsStream, "secret".toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
-            throw new SpringRedditException("Exception occured while loading keystore");
+         //   throw new SpringRedditException("Exception occured while loading keystore");
+        	e.printStackTrace();
+        	//e.getCause();
         }
 
     }

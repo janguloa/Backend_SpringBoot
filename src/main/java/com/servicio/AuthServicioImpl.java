@@ -85,7 +85,7 @@ public class AuthServicioImpl implements AuthServicio {
 		SecurityContextHolder.getContext().setAuthentication(authenticate);
 		String authenticationToken = jwtProvider.generateToken(authenticate);
 		return new AuthenticationResponse(authenticationToken, loginRequest.getUsuario());
-		
+
 	}
 	
 	private String encodePassword(String password) {
