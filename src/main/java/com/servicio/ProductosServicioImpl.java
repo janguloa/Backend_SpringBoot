@@ -1,46 +1,75 @@
 package com.servicio;
 
 import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.dto.ProductosDto;
+import com.exceptions.SubredditNotFoundException;
 import com.modelo.Productos;
-import com.modelo.ResourceNotFoundException;
 import com.repositorio.ProductosRepositorio;
+import lombok.AllArgsConstructor;
+import static java.time.Instant.now;
+import static java.util.stream.Collectors.toList;
 
-@Service("productosServicio")
-@Transactional
+@Service
+@AllArgsConstructor
 public class ProductosServicioImpl implements ProductosServicio {
 	
-	@Autowired
 	private ProductosRepositorio productosRepositorio;
-
+	private AuthServicio authServicio;
+	
 	@Override
-	public List<Productos> findAllActives() {
+	@Transactional(readOnly = true)
+	public List<ProductosDto> getAllActives() {
 		
-		List<Productos> lis = productosRepositorio.findAllByEstado("0");
-		
-		return lis;	
-	}
-
-	@Override
-	public List<Productos> findCodigo() {
-
-		List<Productos> lis = productosRepositorio.findAllByCodproducto("CONSOL1");
-		
-		return lis;
-	}
-
-	@Override
-	public Productos CreateUser(Productos productos) {
-
-		return productosRepositorio.save(productos);
+		return productosRepositorio.findAll()
+				.stream()
+				.map(this::mapToDto)
+				.collect(toList());
 		
 	}
-
+	
+	@Override
+	@Transactional(readOnly = true)
+	public ProductosDto getProductos(Long id) {
+		Productos productos = productosRepositorio.findById(id)
+				.orElseThrow(() -> new SubredditNotFoundException("Subreddit not found with id -" + id));
+	    return mapToDto(productos);
+	}
+	
+	@Transactional
+	@Override
+	public ProductosDto save(ProductosDto productosDto) {
+		
+		Productos productos = productosRepositorio.save(mapToProductos(productosDto));
+		productosDto.setId(productos.getId());
+		
+		return productosDto;
+	}
+	
+	
+	//Enlazar el Dto con el Model, para consultar los productos
+	
+	private ProductosDto mapToDto(Productos productos) {
+        return ProductosDto.builder().codproducto(productos.getCodproducto())
+                .id(productos.getId())
+                .descripcion(productos.getDescripcion())
+                .estado(productos.getEstado())
+                .build();
+    }
+	
+	//Enlazar el Dto con el Model, para consultar crear los productos
+	
+	private Productos mapToProductos(ProductosDto productosDto) {
+        return Productos.builder().codproducto(productosDto.getCodproducto())
+        		.descripcion(productosDto.getDescripcion())
+        		.estado(productosDto.getEstado())
+        		.usuario_registro(authServicio.getCurrentUser())
+        		.fecha_registro(now()).build();
+        	
+    }
+	
+	/*
 	@Override
 	public Productos UpdateUser(Productos productos) {
 
@@ -80,5 +109,5 @@ public class ProductosServicioImpl implements ProductosServicio {
 			throw new ResourceNotFoundException("Record not foud with id: " + codigo);
 			
 		}
-	}
+	}*/
 }

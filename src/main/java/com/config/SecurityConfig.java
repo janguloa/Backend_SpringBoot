@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.seguridad.JwtAuthenticationFilter;
+
 import lombok.AllArgsConstructor;
 
 @EnableWebSecurity //Habilita el modulo de seguridad en el proyecto
@@ -18,6 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // Clase base
 																   // métodos de Seguridad
 	
 	private final UserDetailsService userDetailsService;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
 	@Override
@@ -33,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // Clase base
                 .permitAll()
                 .anyRequest()
                 .authenticated();
+        httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
     
     public void configureGlobal (AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {

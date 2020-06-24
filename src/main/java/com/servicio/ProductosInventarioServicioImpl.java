@@ -27,9 +27,9 @@ public class ProductosInventarioServicioImpl implements ProductosInventarioServi
 	@Override
 	public List<ProductosInventario> findByCodigo() {
 		
-		List <ProductosInventario> lista = productosInventarioRepositorio.findAllByCodproducto(new Productos("CONSOL1"));
+	//	List <ProductosInventario> lista = productosInventarioRepositorio.findAllByCodproducto(new Productos("CONSOL1"));
 		
-		return lista;
+		return null;
 	}
 
 	@Override

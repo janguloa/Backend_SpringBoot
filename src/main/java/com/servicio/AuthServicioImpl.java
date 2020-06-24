@@ -3,16 +3,14 @@ package com.servicio;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.transaction.Transactional;
-
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.dto.AuthenticationResponse;
 import com.dto.LoginRequest;
 import com.dto.RegisterRequest;
@@ -24,7 +22,6 @@ import com.repositorio.UsuarioRepositorio;
 import com.repositorio.VerificationTokenRepositorio;
 import com.seguridad.JWTProvider;
 import com.util.Constants;
-
 import lombok.AllArgsConstructor;
 
 @Service
@@ -104,4 +101,13 @@ public class AuthServicioImpl implements AuthServicio {
 		usuarios.setEnabled(true);
 		usuarioRepositorio.save(usuarios);
 		}
+	
+		@Override
+		@Transactional(readOnly = true)
+	    public Usuarios getCurrentUser() {
+	        org.springframework.security.core.userdetails.User principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.
+	                getContext().getAuthentication().getPrincipal();
+	        return usuarioRepositorio.findByUsuario(principal.getUsername())
+	                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+	  }
 }

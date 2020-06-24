@@ -33,14 +33,11 @@ public class JWTProvider {
         try {
             keyStore = KeyStore.getInstance("jks");
             InputStream resourceAsStream = getClass().getResourceAsStream("/springblog.jks");
-            System.out.println("secret".toCharArray());
             keyStore.load(resourceAsStream, "secret".toCharArray());
         } catch (KeyStoreException | CertificateException | NoSuchAlgorithmException | IOException e) {
-         //   throw new SpringRedditException("Exception occured while loading keystore");
-        	e.printStackTrace();
-        	//e.getCause();
+            throw new SpringRedditException("Exception occured while loading keystore");
+        //	e.printStackTrace(); 
         }
-
     }
 
     public String generateToken(Authentication authentication) {

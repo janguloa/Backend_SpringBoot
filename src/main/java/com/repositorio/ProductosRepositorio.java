@@ -1,17 +1,16 @@
 package com.repositorio;
 
-import java.util.List;
-import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
 import com.modelo.Productos;
 
 @Repository
-public interface ProductosRepositorio extends CrudRepository<Productos, String> {
+public interface ProductosRepositorio extends JpaRepository <Productos, Long> {
 	
-	List<Productos> findAllByEstado(String estado);
+	Optional <Productos> findByCodproducto (String codproducto);
 	
-	List<Productos> findAllByCodproducto(String codigo);
+	//List<ProductosDto> findAllByEstado(String estado);
 	
-	
+	//List<ProductosDto> findAllByCodproducto(String codigo);
 }

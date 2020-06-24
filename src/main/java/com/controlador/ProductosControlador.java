@@ -1,6 +1,9 @@
 package com.controlador;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,39 +17,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.dto.ProductosDto;
 import com.modelo.Productos;
 import com.servicio.ProductosServicio;
 
+import lombok.AllArgsConstructor;
+
 @RestController
+@AllArgsConstructor
 @CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
-@RequestMapping("/")
+@RequestMapping("/api/productos")
 public class ProductosControlador {
 	
-	@Autowired
 	private ProductosServicio productosServicio;
 	
-	@RequestMapping("/productos")
 	@GetMapping
-	public List<Productos> listAllProductos(){
+	public List<ProductosDto> listAllProductos(){
 		
-		return productosServicio.findAllActives();
+		return productosServicio.getAllActives();
 	}
 	
-	@RequestMapping("/productoscodigo")
-	@GetMapping
-	public List<Productos> listCodigoProducto(){
+	@GetMapping("/{id}")
+	public ProductosDto getProductos(@PathVariable Long id){
 		
-		return productosServicio.findCodigo();
+		return productosServicio.getProductos(id);
 	}
 	
-	@PostMapping("/crearproducto")
-	public ResponseEntity <Productos> crearProducto(@RequestBody Productos productos) {
+	@PostMapping
+	public ProductosDto crearProducto(@RequestBody @Valid ProductosDto productosDto) {
 		
-		return ResponseEntity.ok().body(this.productosServicio.CreateUser(productos));
+		return productosServicio.save(productosDto);
 		
 	}
 	
-	@PutMapping("/productos/{codigo}")
+/*	@PutMapping("/productos/{codigo}")
 	public ResponseEntity <Productos> updateProducto(@PathVariable String codigo, @RequestBody Productos productos){
 		
 		productos.setCodproducto(codigo);
@@ -60,7 +65,7 @@ public class ProductosControlador {
 		
 		return new ResponseEntity<>(codigo, HttpStatus.OK);
 		
-	}
+	}*/
 	
 	
 }

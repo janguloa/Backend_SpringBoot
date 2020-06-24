@@ -1,19 +1,18 @@
 package com.servicio;
 
 import java.util.List;
-
-import com.modelo.Productos;
+import com.dto.ProductosDto;
 
 public interface ProductosServicio {
 	
-	List<Productos> findAllActives();
+	List<ProductosDto> getAllActives();
 	
-	List<Productos> findCodigo();
+	public ProductosDto getProductos(Long id);
 	
-	Productos CreateUser (Productos productos);
+	ProductosDto save (ProductosDto productosDto);
 	
-	Productos UpdateUser (Productos productos);
+/*	ProductosDto UpdateUser (ProductosDto ProductosDto);
 	
-	void DeleteUser (String codigo);
+	void DeleteUser (String codigo); */
 
 }
