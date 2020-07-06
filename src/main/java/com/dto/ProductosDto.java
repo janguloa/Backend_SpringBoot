@@ -15,5 +15,6 @@ public class ProductosDto {
 	private String codproducto;
 	private String descripcion;
 	private String estado;
+	private String cantProductos;
 	
 }

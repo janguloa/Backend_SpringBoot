@@ -1,5 +1,6 @@
 package com.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -41,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // Clase base
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
     
+    @Autowired
     public void configureGlobal (AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
     	authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
