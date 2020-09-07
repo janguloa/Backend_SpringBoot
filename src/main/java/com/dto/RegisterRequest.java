@@ -1,4 +1,4 @@
-package com.dto; // Objeto de Transferencia de Data
+package com.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 	
-	private String usuario;
-	private String correo;
-	private String contrasena;
-	private String estado;
-	private String cod_cia;
+	private String username;
+	private String email;
+	private String password;
 
 }

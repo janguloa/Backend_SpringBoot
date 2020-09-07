@@ -12,43 +12,53 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
-import com.seguridad.JwtAuthenticationFilter;
+import com.security.JwtAuthenticationFilter;
 
 import lombok.AllArgsConstructor;
 
-@EnableWebSecurity //Habilita el modulo de seguridad en el proyecto
+@EnableWebSecurity
 @AllArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter { // Clase base que proporciona los 
-																   // métodos de Seguridad
-	
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
 	private final UserDetailsService userDetailsService;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
-	
+
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 
-    @Override
-    public void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/auth/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated();
-        httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-    
-    @Autowired
-    public void configureGlobal (AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-    	authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }
+	@Override
+	public void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.csrf().disable()
+			.authorizeRequests()
+			.antMatchers("/api/auth/**")
+			.permitAll()
+			.antMatchers(HttpMethod.GET, "/api/inventory")
+			.permitAll()
+			.antMatchers("/v2/api-docs",
+			"/configuration/ui",
+			"/swagger-resources/**",
+			"/configuration/security",
+			"/swagger-ui.html",
+			"/webjars/**")
+			.permitAll()
+			.anyRequest()
+			.authenticated();
+			httpSecurity.addFilterBefore(jwtAuthenticationFilter, 
+			UsernamePasswordAuthenticationFilter.class);
+	}
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+	}
+
+	@Bean
+	PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }
