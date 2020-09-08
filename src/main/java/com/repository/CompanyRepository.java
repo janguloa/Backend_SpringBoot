@@ -8,6 +8,6 @@ import com.model.Company;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 	
-	Optional<Company> findById(String id);
+	Optional<Company> findById(Long id);
 
 }
