@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Users {
     @Id
-	@SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ", initialValue = 1, allocationSize=100)
+	@SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "USER_SEQ")
     private Long userId;
     @NotBlank(message = "Username is required")

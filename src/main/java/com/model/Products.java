@@ -22,7 +22,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Products {
 	
 	@Id
-	@SequenceGenerator(name = "PRODUCTS_SEQ", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize=100)
+	@SequenceGenerator(name = "PRODUCTS_SEQ", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "PRODUCTS_SEQ")
 	private Long id;
 	private String codproduct;

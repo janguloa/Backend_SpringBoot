@@ -25,7 +25,7 @@ public class InventoryProducts {
 	
 	@Id
 	@Column(name="id")
-	@SequenceGenerator(name = "INVPRODUCTS_SEQ", sequenceName = "INVPRODUCTS_SEQ", initialValue = 1, allocationSize=100)
+	@SequenceGenerator(name = "INVPRODUCTS_SEQ", sequenceName = "INVPRODUCTS_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "INVPRODUCTS_SEQ")
 	private Long id;
 	
