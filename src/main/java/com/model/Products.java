@@ -27,7 +27,7 @@ public class Products {
 	private Long id;
 	private String codproduct;
 	private String description;
-	private String state;
+	private boolean state;
 	private Instant createdDate;
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "createdUser", referencedColumnName = "userId")

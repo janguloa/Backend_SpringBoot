@@ -1,7 +1,5 @@
 package com.dto;
 
-import com.model.UpdateType;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyDto {
+public class UsersDto {
 	
 	private Long id;
-	private String description;
-	private UpdateType updateType;
+	private String username;
+	private String password;
+	private String email;
+	private Long id_company;
 }

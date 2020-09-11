@@ -126,7 +126,6 @@ public class AuthService {
 		Optional<VerificationToken> verificationTokenOptional = verificationTokenRepository.findByToken(token);
 		verificationTokenOptional.orElseThrow(() -> new SpringInventoryException("Token inválido"));
 		fetchUserAndEnable(verificationTokenOptional.get());
-
 	}
 
 	@Transactional

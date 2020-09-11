@@ -26,27 +26,30 @@ public class CompanyController {
 	private final CompanyService companyService;
 	
 	@PostMapping("/create")
-	public CompanyDto register(@RequestBody CompanyDto companyRequest) {
+	public ResponseEntity<Void> register(@RequestBody CompanyDto companyRequest) {
 		
-		return companyService.save(companyRequest);
+		companyService.save(companyRequest);
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity update(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
+	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
 		
 		companyDto.setId(id);
 		companyDto.setUpdateType(UPDATE);
+		companyService.update(companyDto);
 		
-		return status(HttpStatus.OK).body(companyService.update(companyDto));
-	
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/delete/{id}")
-	public CompanyDto delete(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
+	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
 		
 		companyDto.setId(id);
 		companyDto.setUpdateType(DELETE);
-		return companyService.update(companyDto);
+		companyService.update(companyDto);
 		
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 }
