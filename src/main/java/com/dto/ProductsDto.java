@@ -14,7 +14,6 @@ public class ProductsDto {
 
 	private String codproduct;
 	private String description;
-	private Users user;
-	private Company company;
+	private Long id_company;
 	
 }
