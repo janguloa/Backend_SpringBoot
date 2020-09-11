@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,8 @@ public class Company {
 	private long Id;
 	private String description;
 	private boolean enabled;
+	@Transient
+	private UpdateType updateType; 
+	
 	
 }

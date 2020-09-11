@@ -9,6 +9,8 @@ import com.dto.CompanyDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
 import com.repository.CompanyRepository;
+import static com.model.UpdateType.DELETE;
+import static com.model.UpdateType.UPDATE;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +30,7 @@ public class CompanyService {
 		Company save = companyRepository.save(mapToCompany(companyDto));
 		companyDto.setId(save.getId());
 		
-		return companyDto;
-		
+		return companyDto;		
 	}
 	
 	@Transactional
@@ -41,8 +42,17 @@ public class CompanyService {
 			
 			Company companyUpdate = companyDb.get();
 			companyUpdate.setId(companyDto.getId());
-			companyUpdate.setDescription(companyDto.getDescription().toUpperCase());
-			companyUpdate.setEnabled(true);
+			
+			if(UPDATE.equals(companyDto.getUpdateType())) {
+				
+				companyUpdate.setDescription(companyDto.getDescription().toUpperCase());
+				companyUpdate.setEnabled(true);
+				
+			}
+			else {
+				companyUpdate.setEnabled(false);
+				
+			}
 			
 			companyRepository.save(companyUpdate);
 		}	
