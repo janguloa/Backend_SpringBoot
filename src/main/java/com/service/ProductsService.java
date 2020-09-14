@@ -48,7 +48,7 @@ public class ProductsService {
 				.company(company)
 				.createdDate(Instant.now())
 				.user(authService.getCurrentUser())
-				.state(true)
+				.enabled(true)
 				.build();
 	}
 	
@@ -63,7 +63,7 @@ public class ProductsService {
 			products.setDescription(productsDto.getDescription().toUpperCase());
 			
 		} else {
-			products.setState(false);
+			products.setEnabled(false);
 		}
 		
 		productsRepository.save(products);

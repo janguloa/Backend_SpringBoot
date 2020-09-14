@@ -1,5 +1,7 @@
 package com.dto;
 
+import com.model.UpdateType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +15,6 @@ public class PurchasesDto {
 	private String description;
 	private Long id_company; 
 	private Double totalPrice;
+	private UpdateType updateType;
 
 }

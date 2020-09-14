@@ -1,8 +1,13 @@
 package com.controller;
 
+import static com.model.UpdateType.DELETE;
+import static com.model.UpdateType.UPDATE;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +31,25 @@ public class PurchasesController {
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
 		
+	}
+	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody PurchasesDto purchasesDto) {
+		
+		purchasesDto.setId(id);
+		purchasesDto.setUpdateType(UPDATE);
+		purchasesService.update(purchasesDto);
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	@PutMapping("/delete/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PurchasesDto purchasesDto) {
+		
+		purchasesDto.setId(id);
+		purchasesDto.setUpdateType(DELETE);
+		purchasesService.update(purchasesDto);
+		
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 }

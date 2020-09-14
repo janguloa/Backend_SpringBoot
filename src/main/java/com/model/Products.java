@@ -29,7 +29,7 @@ public class Products {
 	private Long id;
 	private String codproduct;
 	private String description;
-	private boolean state;
+	private boolean enabled;
 	private Instant createdDate;
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "createdUser", referencedColumnName = "userId")

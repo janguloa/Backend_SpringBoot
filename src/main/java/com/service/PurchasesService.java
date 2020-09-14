@@ -1,6 +1,7 @@
 package com.service;
 
 import java.time.Instant;
+import static com.model.UpdateType.UPDATE;
 
 import javax.transaction.Transactional;
 
@@ -35,13 +36,41 @@ public class PurchasesService {
 		
 	}
 	
+	@Transactional
+	public PurchasesDto update (PurchasesDto purchasesDto) {
+		
+		fechPurchasesAndEnabled(purchasesDto);
+		
+		return purchasesDto;
+	}
+	
 	private Purchases PurchasesDto(PurchasesDto purchasesDto, Company company) {
 		
 		return Purchases.builder()
 				.description(purchasesDto.getDescription())
 				.createdate(Instant.now())
 				.totalPrice(purchasesDto.getTotalPrice())
+				.enabled(true)
 				.company(company)
 				.build();
+	}
+	
+	private void fechPurchasesAndEnabled (PurchasesDto purchasesDto) {
+		
+		Purchases purchases = purchasesRepository.findById(purchasesDto.getId())
+				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + purchasesDto.getId()));
+		
+		if(UPDATE.equals(purchasesDto.getUpdateType())) {
+			
+			
+			purchases.setDescription(purchasesDto.getDescription());
+		}
+		
+		else {
+			purchases.setEnabled(false);
+		}
+		
+		purchasesRepository.save(purchases);
+		
 	}
 }
