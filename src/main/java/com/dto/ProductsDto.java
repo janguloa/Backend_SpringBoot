@@ -1,7 +1,6 @@
 package com.dto;
 
-import com.model.Company;
-import com.model.Users;
+import com.model.UpdateType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,8 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProductsDto {
 
+	private Long id;
 	private String codproduct;
 	private String description;
 	private Long id_company;
+	private UpdateType updateType;
 	
 }

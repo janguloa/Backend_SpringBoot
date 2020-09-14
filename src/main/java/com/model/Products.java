@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,4 +37,7 @@ public class Products {
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
 	private Company company;
+	
+	@Transient
+	private UpdateType updateType; 
 }

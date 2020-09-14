@@ -43,7 +43,7 @@ public class CompanyController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@PostMapping("/delete/{id}")
+	@PutMapping("/delete/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
 		
 		companyDto.setId(id);

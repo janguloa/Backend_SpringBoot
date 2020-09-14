@@ -1,18 +1,13 @@
 package com.service;
 
 import static com.model.UpdateType.UPDATE;
-
 import java.time.Instant;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.dto.CompanyDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
 import com.repository.CompanyRepository;
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,16 +32,16 @@ public class CompanyService {
 	@Transactional
 	public CompanyDto update(CompanyDto companyDto) {
 		
-		fetchCompanyAndEnable(companyDto.getId(), companyDto);
+		fetchCompanyAndEnable(companyDto);
 		
 		return companyDto;
 	}
 	
 	@Transactional
-	private void fetchCompanyAndEnable(Long id, CompanyDto companyDto) {
+	private void fetchCompanyAndEnable (CompanyDto companyDto) {
 		
-		Company company = companyRepository.findById(id)
-				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código" + id));
+		Company company = companyRepository.findById(companyDto.getId())
+				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código" + companyDto.getId()));
 		
 		if(UPDATE.equals(companyDto.getUpdateType())) {
 			

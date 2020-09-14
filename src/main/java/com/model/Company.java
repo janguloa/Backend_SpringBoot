@@ -30,13 +30,13 @@ public class Company {
 	@GeneratedValue(strategy = SEQUENCE, generator = "COMPANY_SEQ")
 	private long Id;
 	private String description;
-	private boolean enabled;
-	@Transient
-	private UpdateType updateType; 
+	private boolean enabled; 
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "createdUser", referencedColumnName = "userId")
 	private Users users;
 	private Instant createdate;
 	
+	@Transient
+	private UpdateType updateType;
 	
 }
