@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,20 +22,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Company {
+public class Purchases {
 	
 	@Id
-	@SequenceGenerator(name = "COMPANY_SEQ", sequenceName = "COMPANY_SEQ", initialValue = 1, allocationSize=10)
-	@GeneratedValue(strategy = SEQUENCE, generator = "COMPANY_SEQ")
+	@SequenceGenerator(name = "PURCHASES_SEQ", sequenceName = "PURCHASES_SEQ", initialValue = 1, allocationSize=10)
+	@GeneratedValue(strategy = SEQUENCE, generator = "PURCHASES_SEQ")
 	private Long Id;
 	private String description;
-	private boolean enabled; 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "createdUser", referencedColumnName = "userId")
-	private Users users;
+	private double totalPrice;
 	private Instant createdate;
-	
-	@Transient
-	private UpdateType updateType;
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
+	private Company company;
 	
 }
