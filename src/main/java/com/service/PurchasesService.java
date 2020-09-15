@@ -33,13 +33,12 @@ public class PurchasesService {
 		purchasesRepository.save(PurchasesDto(purchasesDto, company));
 		
 		return purchasesDto;
-		
 	}
 	
 	@Transactional
 	public PurchasesDto update (PurchasesDto purchasesDto) {
 		
-		fechPurchasesAndEnabled(purchasesDto);
+		fetchPurchasesAndEnabled(purchasesDto);
 		
 		return purchasesDto;
 	}
@@ -55,7 +54,7 @@ public class PurchasesService {
 				.build();
 	}
 	
-	private void fechPurchasesAndEnabled (PurchasesDto purchasesDto) {
+	private void fetchPurchasesAndEnabled (PurchasesDto purchasesDto) {
 		
 		Purchases purchases = purchasesRepository.findById(purchasesDto.getId())
 				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + purchasesDto.getId()));
@@ -71,6 +70,5 @@ public class PurchasesService {
 		}
 		
 		purchasesRepository.save(purchases);
-		
 	}
 }
