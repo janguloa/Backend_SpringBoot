@@ -48,12 +48,13 @@ public class PurchasesService {
 		return Purchases.builder()
 				.description(purchasesDto.getDescription())
 				.createdate(Instant.now())
-				.totalPrice(purchasesDto.getTotalPrice())
+				.totalPrice(0)
 				.enabled(true)
 				.company(company)
 				.build();
 	}
 	
+	@Transactional
 	private void fetchPurchasesAndEnabled (PurchasesDto purchasesDto) {
 		
 		Purchases purchases = purchasesRepository.findById(purchasesDto.getId())
@@ -68,6 +69,17 @@ public class PurchasesService {
 		else {
 			purchases.setEnabled(false);
 		}
+		
+		purchasesRepository.save(purchases);
+	}
+	
+	@Transactional
+	public void updateTotalPrice (Long IdPurchases, Double totalPrice) {
+		
+		Purchases purchases = purchasesRepository.findById(IdPurchases)
+				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + IdPurchases));
+
+		purchases.setTotalPrice(purchases.getTotalPrice() + totalPrice);
 		
 		purchasesRepository.save(purchases);
 	}

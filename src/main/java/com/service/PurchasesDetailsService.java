@@ -1,9 +1,13 @@
 package com.service;
 
 import static com.model.UpdateType.UPDATE;
+
 import java.time.Instant;
+
 import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
+
 import com.dto.PurchasesDetailsDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
@@ -14,6 +18,7 @@ import com.repository.CompanyRepository;
 import com.repository.ProductsRepository;
 import com.repository.PurchasesDetailsRepository;
 import com.repository.PurchasesRepository;
+
 import lombok.AllArgsConstructor;
 
 @Service
@@ -24,22 +29,23 @@ public class PurchasesDetailsService {
 	private final CompanyRepository companyRepository;
 	private final PurchasesRepository purchasesRepository;
 	private final ProductsRepository productsRepository;
+	private final PurchasesService purchasesService;
 	
 	@Transactional
 	public PurchasesDetailsDto save(PurchasesDetailsDto purchasesDetailsDto) {
 		
 		Company company = companyRepository.findById(purchasesDetailsDto.getId_company())
-				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código" + purchasesDetailsDto.getId()));
+				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código " + purchasesDetailsDto.getId_company()));
 		
 		Purchases purchases = purchasesRepository.findById(purchasesDetailsDto.getId_purchases())
-				.orElseThrow(() -> new SpringInventoryException("Compra no encontrada con el código" + purchasesDetailsDto.getId_purchases()));
+				.orElseThrow(() -> new SpringInventoryException("Compra no encontrada con el código " + purchasesDetailsDto.getId_purchases()));
 		
 		Products products = productsRepository.findById(purchasesDetailsDto.getId_product())
-				.orElseThrow(() -> new SpringInventoryException("Producto no encontrada con el código" + purchasesDetailsDto.getId_product())); 
+				.orElseThrow(() -> new SpringInventoryException("Producto no encontrada con el código " + purchasesDetailsDto.getId_product())); 
 				
 		
 		purchasesDetailsRepository.save(PurchasesDetailsToDto(purchasesDetailsDto, company, purchases, products));
-		
+		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), accumCost(purchasesDetailsDto));
 		
 		return purchasesDetailsDto;
 	}
@@ -88,12 +94,13 @@ public class PurchasesDetailsService {
 		}
 	}
 	
-	public Double fetchCost (Long idProduct) {
+	private Double accumCost(PurchasesDetailsDto purchasesDetailsDto) {
 		
-		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByIdProduct(idProduct)
-				.orElseThrow(() -> new SpringInventoryException("El detalle de compra no fue encontrado con el siguiente codigo " + idProduct));
+		Double unitaryProduct;
+		Double totalProduct;
 		
-		return purchasesDetails.getUnitaryCost() + purchasesDetails.getUnitaryShippingCost() + purchasesDetails.getTaxesCost();
-		
+		unitaryProduct  = purchasesDetailsDto.getUnitaryCost() + purchasesDetailsDto.getUnitaryShippingCost() + purchasesDetailsDto.getTaxesCost();
+		totalProduct = unitaryProduct * purchasesDetailsDto.getQuantity();
+		return totalProduct;
 	}
 }

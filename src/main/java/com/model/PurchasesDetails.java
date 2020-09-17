@@ -53,4 +53,9 @@ public class PurchasesDetails {
 	
 	@Transient
 	private UpdateType updateType; 
+	
+	public Double fetchCost() {
+		
+		return 	getUnitaryCost() + getTaxesCost() + getUnitaryShippingCost();
+	}
 }

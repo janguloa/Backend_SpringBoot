@@ -14,7 +14,6 @@ public class PurchasesDto {
 	private Long id;
 	private String description;
 	private Long id_company; 
-	private Double totalPrice;
 	private UpdateType updateType;
 
 }

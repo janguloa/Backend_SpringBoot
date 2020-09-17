@@ -2,8 +2,6 @@ package com.controller;
 
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
-import static org.springframework.http.ResponseEntity.status;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

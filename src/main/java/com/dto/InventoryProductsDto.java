@@ -1,5 +1,7 @@
 package com.dto;
 
+import com.model.UpdateType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +18,4 @@ public class InventoryProductsDto {
 	private Double discountPercent;
 	private Long idProduct;
 	private Long idCompany;
-
 }
