@@ -19,5 +19,6 @@ public class PurchasesDetailsDto {
 	private UpdateType updateType;
 	private Long id_company; 
 	private Long id_purchases;
+	private Long id_product;
 
 }

@@ -47,6 +47,10 @@ public class PurchasesDetails {
 	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
 	private Company company;
 	
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "IdProduct", referencedColumnName = "Id")
+	private Products products;
+	
 	@Transient
 	private UpdateType updateType; 
 }
