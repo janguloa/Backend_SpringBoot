@@ -1,13 +1,10 @@
 package com.service;
 
+import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
-
 import java.time.Instant;
-
 import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
-
 import com.dto.PurchasesDetailsDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
@@ -45,7 +42,9 @@ public class PurchasesDetailsService {
 				
 		
 		purchasesDetailsRepository.save(PurchasesDetailsToDto(purchasesDetailsDto, company, purchases, products));
-		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), accumCost(purchasesDetailsDto));
+	//	purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), accumCost(purchasesDetailsDto), purchasesDetailsDto.getOperations());
+		
+		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), getAllPurchasesDetailsForPurchases(purchasesDetailsDto.getId_purchases()));
 		
 		return purchasesDetailsDto;
 	}
@@ -54,6 +53,7 @@ public class PurchasesDetailsService {
 	public PurchasesDetailsDto update(PurchasesDetailsDto purchasesDetailsDto) {
 		
 		fetchPurchasesDetailsAndEnable(purchasesDetailsDto);
+		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), accumCost(purchasesDetailsDto), purchasesDetailsDto.getOperations());
 		
 		return purchasesDetailsDto;
 	}
@@ -90,7 +90,13 @@ public class PurchasesDetailsService {
 			
 		} else {
 			
+			purchasesDetailsDto.setId_purchases(purchasesDetails.getPurchases().getId());
+			purchasesDetailsDto.setUnitaryCost(purchasesDetails.getUnitaryCost());
+			purchasesDetailsDto.setUnitaryShippingCost(purchasesDetails.getUnitaryShippingCost());
+			purchasesDetailsDto.setTaxesCost(purchasesDetails.getTaxesCost());
+			purchasesDetailsDto.setQuantity(purchasesDetails.getQuantity());
 			purchasesDetails.setEnabled(false);
+			
 		}
 	}
 	
@@ -102,5 +108,13 @@ public class PurchasesDetailsService {
 		unitaryProduct  = purchasesDetailsDto.getUnitaryCost() + purchasesDetailsDto.getUnitaryShippingCost() + purchasesDetailsDto.getTaxesCost();
 		totalProduct = unitaryProduct * purchasesDetailsDto.getQuantity();
 		return totalProduct;
+	}
+	
+	private Double getAllPurchasesDetailsForPurchases(Long id) {
+		
+		Purchases purchases = purchasesRepository.findById(id)
+				.orElseThrow(()-> new SpringInventoryException("El detalle de compra no fue encontrado con el siguiente codigo " + id));
+		
+		return purchasesDetailsRepository.getAllByPurchases(purchases);
 	}
 }

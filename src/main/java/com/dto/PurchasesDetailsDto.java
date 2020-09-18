@@ -1,5 +1,6 @@
 package com.dto;
 
+import com.model.Operations;
 import com.model.UpdateType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class PurchasesDetailsDto {
 	private Long id_company; 
 	private Long id_purchases;
 	private Long id_product;
+	private Operations operations;
 
 }

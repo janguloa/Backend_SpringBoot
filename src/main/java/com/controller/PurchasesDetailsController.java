@@ -2,6 +2,9 @@ package com.controller;
 
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
+import static com.model.Operations.ADD;
+import static com.model.Operations.SUBTRACT;
+import static com.model.Operations.EQUALIZE;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +29,7 @@ public class PurchasesDetailsController {
 	@PostMapping("/create")
 	public ResponseEntity<Void> create(@RequestBody PurchasesDetailsDto purchasesDetailsDto) {
 		
+		purchasesDetailsDto.setOperations(ADD);
 		purchasesDetailsService.save(purchasesDetailsDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
@@ -36,6 +40,7 @@ public class PurchasesDetailsController {
 		
 		purchasesDetailsDto.setId(id);
 		purchasesDetailsDto.setUpdateType(UPDATE);
+		purchasesDetailsDto.setOperations(EQUALIZE);
 		
 		purchasesDetailsService.update(purchasesDetailsDto);
 		
@@ -47,6 +52,7 @@ public class PurchasesDetailsController {
 		
 		purchasesDetailsDto.setId(id);
 		purchasesDetailsDto.setUpdateType(DELETE);
+		purchasesDetailsDto.setOperations(SUBTRACT);
 		
 		purchasesDetailsService.update(purchasesDetailsDto);
 		
