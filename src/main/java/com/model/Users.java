@@ -27,7 +27,7 @@ public class Users {
     @Id
 	@SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "USER_SEQ")
-    private Long userId;
+    private Long UserId;
     @NotBlank(message = "Username is required")
     private String username;
     @NotBlank(message = "Password is required")
@@ -38,6 +38,6 @@ public class Users {
     private Instant created;
     private boolean enabled;
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
+	@JoinColumn(name = "IdCompany", referencedColumnName = "CompanyId")
     private Company company;
 }

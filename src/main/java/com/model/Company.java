@@ -28,12 +28,9 @@ public class Company {
 	@Id
 	@SequenceGenerator(name = "COMPANY_SEQ", sequenceName = "COMPANY_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "COMPANY_SEQ")
-	private Long Id;
+	private Long CompanyId;
 	private String description;
 	private boolean enabled; 
-	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "createdUser", referencedColumnName = "userId")
-	private Users users;
 	private Instant createdate;
 	
 	@Transient

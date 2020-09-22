@@ -96,7 +96,6 @@ public class PurchasesService {
 		Purchases purchases = purchasesRepository.findById(IdPurchases)
 				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + IdPurchases));
 
-			
 			purchases.setTotalPrice(totalPrice);
 			purchasesRepository.save(purchases);
 	}

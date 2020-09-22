@@ -20,7 +20,7 @@ public class VerificationToken {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private Long VerificationId;
     private String token;
     @OneToOne(fetch = LAZY)
     private Users user;

@@ -29,12 +29,12 @@ public class Purchases {
 	@Id
 	@SequenceGenerator(name = "PURCHASES_SEQ", sequenceName = "PURCHASES_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "PURCHASES_SEQ")
-	private Long Id;
+	private Long PurchasesId;
 	private String description;
 	private double totalPrice;
 	private Instant createdate;
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
+	@JoinColumn(name = "IdCompany", referencedColumnName = "CompanyId")
 	private Company company;
 	private boolean enabled;
 	

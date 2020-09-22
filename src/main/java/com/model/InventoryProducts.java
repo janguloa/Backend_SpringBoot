@@ -24,13 +24,12 @@ import lombok.NoArgsConstructor;
 public class InventoryProducts {
 	
 	@Id
-	@Column(name="id")
 	@SequenceGenerator(name = "INVPRODUCTS_SEQ", sequenceName = "INVPRODUCTS_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "INVPRODUCTS_SEQ")
-	private Long id;
+	private Long InventoryId;
 	
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdProduct", referencedColumnName = "Id")
+	@JoinColumn(name = "IdProduct", referencedColumnName = "ProductId")
 	private Products products;
 	
 	private int count;
@@ -43,11 +42,11 @@ public class InventoryProducts {
 	private Instant createdDate;
 	
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "createdUser", referencedColumnName = "userId")
+	@JoinColumn(name = "createdUser", referencedColumnName = "UserId")
 	private Users user;
 	
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
+	@JoinColumn(name = "IdCompany", referencedColumnName = "CompanyId")
 	private Company company;
 
 }

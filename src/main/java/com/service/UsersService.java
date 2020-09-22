@@ -23,25 +23,24 @@ public class UsersService {
 	
 	private final UserRepository usersRepository;
 	private final CompanyRepository companyRepository;
+	private final AuthService authService;
 	
 	@Transactional
-	public UsersDto updateCompany(UsersDto usersDto, Long id) {
+	public void updateCompany(Long id) {
 			
-		Optional<Company> company = companyRepository.findById(usersDto.getId_company());
+		Optional<Company> company = companyRepository.findById(id);
 		company.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código" + id));
 			
-		usersDto.setId(id);
-		fetchUserAndCompany(usersDto, company.get());
-				
-		return usersDto;
+		Users userFound = authService.getCurrentUser();
+		
+		fetchUserAndCompany(userFound, company.get());		
 	}
 	
-	private void fetchUserAndCompany(UsersDto usersDto, Company company) {
+	private void fetchUserAndCompany(Users userFound, Company company) {
 		
-		Users users = usersRepository.findById(usersDto.getId())
-				.orElseThrow(() -> new SpringInventoryException("Usuario no encontrado con el codigo" + usersDto.getId()));
+		Users users = usersRepository.findById(userFound.getUserId())
+				.orElseThrow(() -> new SpringInventoryException("Usuario no encontrado con el codigo" + userFound.getUserId()));
 		users.setCompany(company);
-		usersRepository.save(users);
-		
+		usersRepository.save(users);	
 	}
 }

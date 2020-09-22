@@ -30,7 +30,7 @@ public class PurchasesDetails {
 	@Id
 	@SequenceGenerator(name = "PURCHASESDETAILS_SEQ", sequenceName = "PURCHASESDETAILS_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "PURCHASESDETAILS_SEQ")
-	private Long id;
+	private Long PurchasesDetId;
 	private String description;
 	private int quantity;
 	private Double unitaryCost;
@@ -40,15 +40,15 @@ public class PurchasesDetails {
 	private boolean enabled;
 	
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdPurchases", referencedColumnName = "Id")
+	@JoinColumn(name = "IdPurchases", referencedColumnName = "PurchasesId")
 	private Purchases purchases;
 	
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
+	@JoinColumn(name = "IdCompany", referencedColumnName = "CompanyId")
 	private Company company;
 	
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdProduct", referencedColumnName = "Id")
+	@JoinColumn(name = "IdProduct", referencedColumnName = "ProductId")
 	private Products products;
 	
 	@Transient

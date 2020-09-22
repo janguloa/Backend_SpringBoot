@@ -1,8 +1,9 @@
 package com.service;
 
-import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
 import java.time.Instant;
+import java.util.List;
+
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.dto.PurchasesDetailsDto;
@@ -90,7 +91,7 @@ public class PurchasesDetailsService {
 			
 		} else {
 			
-			purchasesDetailsDto.setId_purchases(purchasesDetails.getPurchases().getId());
+			purchasesDetailsDto.setId_purchases(purchasesDetails.getPurchases().getPurchasesId());
 			purchasesDetailsDto.setUnitaryCost(purchasesDetails.getUnitaryCost());
 			purchasesDetailsDto.setUnitaryShippingCost(purchasesDetails.getUnitaryShippingCost());
 			purchasesDetailsDto.setTaxesCost(purchasesDetails.getTaxesCost());
@@ -110,11 +111,22 @@ public class PurchasesDetailsService {
 		return totalProduct;
 	}
 	
-	private Double getAllPurchasesDetailsForPurchases(Long id) {
+	private double getAllPurchasesDetailsForPurchases(Long id) {
 		
-		Purchases purchases = purchasesRepository.findById(id)
-				.orElseThrow(()-> new SpringInventoryException("El detalle de compra no fue encontrado con el siguiente codigo " + id));
+		double unitaryProduct;
+		double totalProduct;
+		double totalPurchases = 0;
 		
-		return purchasesDetailsRepository.getAllByPurchases(purchases);
+		List<PurchasesDetails> listaDetails = purchasesDetailsRepository.getAllByPurchases(id);
+		
+		for(PurchasesDetails item: listaDetails) {
+		
+			unitaryProduct = item.getUnitaryCost() + item.getUnitaryShippingCost() + item.getTaxesCost();
+			totalProduct = unitaryProduct * item.getQuantity();
+			
+			totalPurchases += totalProduct;
+		}
+		
+		return 	totalPurchases;
 	}
 }

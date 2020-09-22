@@ -26,16 +26,16 @@ public class Products {
 	@Id
 	@SequenceGenerator(name = "PRODUCTS_SEQ", sequenceName = "PRODUCTS_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "PRODUCTS_SEQ")
-	private Long id;
+	private Long ProductId;
 	private String codproduct;
 	private String description;
 	private boolean enabled;
 	private Instant createdDate;
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "createdUser", referencedColumnName = "userId")
+	@JoinColumn(name = "createdUser", referencedColumnName = "UserId")
 	private Users user;
 	@ManyToOne(fetch = LAZY)
-	@JoinColumn(name = "IdCompany", referencedColumnName = "Id")
+	@JoinColumn(name = "IdCompany", referencedColumnName = "CompanyId")
 	private Company company;
 	
 	@Transient
