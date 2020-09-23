@@ -25,6 +25,7 @@ public class InventoryProductsService {
 	private final CompanyRepository companyRepository;
 	private final ProductsRepository productsRepository;
 	private final PurchasesDetailsRepository purchasesDetailsRepository;
+	private final PurchasesDetailsService purchasesDetailsService;
 	private final AuthService authService;
 	
 	@Transactional
@@ -36,7 +37,12 @@ public class InventoryProductsService {
 		Products products = productsRepository.findById(inventoryProductsDto.getIdProduct())
 				.orElseThrow(()-> new SpringInventoryException("La compañia no existe con el siguiente codigo " + inventoryProductsDto.getIdProduct()));
 		
-		inventoryProductsRepository.save(inventoryProductsToDto(products, company, inventoryProductsDto));
+		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByProductsAndAssigned(products, false)
+				.orElseThrow(() -> new SpringInventoryException("El detalle de compra no tiene disponible el producto con el siguiente codigo " + inventoryProductsDto.getIdProduct()));
+		
+		inventoryProductsRepository.save(inventoryProductsToDto(products, company, inventoryProductsDto, purchasesDetails));
+		
+		purchasesDetailsService.updateAssigned(purchasesDetails.getPurchasesDetId(), inventoryProductsDto.getOperations());
 		
 		return inventoryProductsDto;
 	}
@@ -49,28 +55,33 @@ public class InventoryProductsService {
 	}
 	
 	public void delete (InventoryProductsDto inventoryProductsDto) {
+			
+		Products products = productsRepository.findById(inventoryProductsDto.getIdProduct())
+				.orElseThrow(()-> new SpringInventoryException("La compañia no existe con el siguiente codigo " + inventoryProductsDto.getIdProduct()));
+		
+		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByProductsAndAssigned(products, true)
+				.orElseThrow(() -> new SpringInventoryException("El detalle de compra no tiene disponible el producto con el siguiente codigo " + inventoryProductsDto.getIdProduct()));
 		
 		inventoryProductsRepository.deleteById(inventoryProductsDto.getId());
+		purchasesDetailsService.updateAssigned(purchasesDetails.getPurchasesDetId(), inventoryProductsDto.getOperations());
 		
 	}
 	
 	@Transactional
-	private InventoryProducts inventoryProductsToDto (Products products, Company company, InventoryProductsDto inventoryProductsDto) {
-	
-		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByProducts(products)
-				.orElseThrow(() -> new SpringInventoryException("La purchasesDetails no existe con el siguiente codigo " + inventoryProductsDto.getIdProduct()));
+	private InventoryProducts inventoryProductsToDto (Products products, Company company, InventoryProductsDto inventoryProductsDto, PurchasesDetails purchasesDetails) {
 		
 		return InventoryProducts.builder()
-				.count(inventoryProductsDto.getCount())
+				.count(purchasesDetails.getQuantity())
 				.priceSale(inventoryProductsDto.getPriceSale())
 				.totalFaulty(inventoryProductsDto.getTotalFaulty())
 				.discountPercent(inventoryProductsDto.getDiscountPercent())
-				.totalStock(getTotalStock(inventoryProductsDto))
+				.totalStock(getTotalStock(inventoryProductsDto, purchasesDetails.getQuantity()))
 				.cost(purchasesDetails.fetchCost())
 				.products(products)
 				.company(company)
 				.user(authService.getCurrentUser())
 				.createdDate(Instant.now())
+				.state(true)
 				.build();
 	}
 	
@@ -88,9 +99,9 @@ public class InventoryProductsService {
 		inventoryProductsRepository.save(inventoryProducts);
 	}
 	
-	private int getTotalStock(InventoryProductsDto inventoryProductsDto) {
+	private int getTotalStock(InventoryProductsDto inventoryProductsDto, int count) {
 		
-		return inventoryProductsDto.getCount() - inventoryProductsDto.getTotalFaulty();
+		return count - inventoryProductsDto.getTotalFaulty();
 		
 	}
 }

@@ -37,6 +37,7 @@ public class PurchasesDetails {
 	private Double taxesCost;
 	private Instant createdate;
 	private boolean enabled;
+	private boolean assigned;
 	
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "IdPurchases", referencedColumnName = "PurchasesId")

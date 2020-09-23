@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.model.Operations.ENABLED;
+import static com.model.Operations.DISABLED;
 import com.dto.InventoryProductsDto;
 import com.service.InventoryProductsService;
 
@@ -28,6 +30,7 @@ public class InventoryProductsController {
 	@PostMapping("/create")
 	public ResponseEntity<Void> save(@RequestBody InventoryProductsDto inventoryProductsDto) {
 		
+		inventoryProductsDto.setOperations(ENABLED);
 		inventoryProductsService.save(inventoryProductsDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
@@ -47,6 +50,7 @@ public class InventoryProductsController {
 	public ResponseEntity<Void> delete (@PathVariable BigInteger id, @RequestBody InventoryProductsDto inventoryProductsDto) {
 		
 		inventoryProductsDto.setId(id);
+		inventoryProductsDto.setOperations(DISABLED);
 		inventoryProductsService.delete(inventoryProductsDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);

@@ -1,7 +1,7 @@
 package com.model;
 
 public enum Operations {
-	ADD("Add"), SUBTRACT("Subtract"), EQUALIZE("EQUALIZE")
+	ADD("ADD"), SUBTRACT("SUBTRACT"), EQUALIZE("EQUALIZE"), ENABLED("ENABLED"), DISABLED("DISABLED")
 	;
 	
 	Operations(String item){

@@ -14,8 +14,10 @@ import com.model.PurchasesDetails;
 public interface PurchasesDetailsRepository extends JpaRepository<PurchasesDetails, BigInteger> {
 	
 	Optional<PurchasesDetails> findById(BigInteger id);
-	
+
 	Optional<PurchasesDetails> findByProducts(Products products);
+	
+	Optional<PurchasesDetails> findByProductsAndAssigned(Products products, boolean assigned);
 	
 	@Query(value="SELECT m.purchases_det_id, m.id_company, m.id_product, m.id_purchases, m.taxes_cost, m.unitary_cost, m.unitary_shipping_cost, m.quantity, m.createdate, m.description,"
 			+ " m.enabled FROM purchases_details m WHERE m.id_purchases = :id_purchases AND m.enabled = :id_enabled", nativeQuery=true)

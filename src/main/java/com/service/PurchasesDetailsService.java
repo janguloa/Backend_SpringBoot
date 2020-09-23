@@ -1,6 +1,7 @@
 package com.service;
 
 import static com.model.UpdateType.UPDATE;
+import static com.model.Operations.ENABLED;
 
 import java.math.BigInteger;
 import java.time.Instant;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.dto.PurchasesDetailsDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
+import com.model.Operations;
 import com.model.Products;
 import com.model.Purchases;
 import com.model.PurchasesDetails;
@@ -75,6 +77,7 @@ public class PurchasesDetailsService {
 				.purchases(purchases)
 				.products(products)
 				.enabled(true)
+				.assigned(false)
 				.build();
 	}	
 	
@@ -104,16 +107,6 @@ public class PurchasesDetailsService {
 		}
 	}
 	
-//	private Double accumCost(PurchasesDetailsDto purchasesDetailsDto) {
-//		
-//		Double unitaryProduct;
-//		Double totalProduct;
-//		
-//		unitaryProduct  = purchasesDetailsDto.getUnitaryCost() + purchasesDetailsDto.getUnitaryShippingCost() + purchasesDetailsDto.getTaxesCost();
-//		totalProduct = unitaryProduct * purchasesDetailsDto.getQuantity();
-//		return totalProduct;
-//	}
-	
 	private double getAllPurchasesDetailsForPurchases(BigInteger id) {
 		
 		double unitaryProduct;
@@ -131,5 +124,23 @@ public class PurchasesDetailsService {
 		}
 		
 		return 	totalPurchases;
+	}
+	
+	@Transactional
+	public void updateAssigned(BigInteger IdPurchasesDet, Operations operations) {
+		
+		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findById(IdPurchasesDet)
+				.orElseThrow(() -> new SpringInventoryException("EL detalle de compra no fue encontrado con el codigo " + IdPurchasesDet));
+
+			if (ENABLED.equals(operations)) {
+				
+				purchasesDetails.setAssigned(true);
+			}
+			else 
+			{
+				purchasesDetails.setAssigned(false);
+			}
+		
+			purchasesDetailsRepository.save(purchasesDetails);
 	}
 }
