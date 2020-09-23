@@ -1,5 +1,6 @@
 package com.repository;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,11 +11,11 @@ import com.model.Company;
 import com.model.InventoryProducts;
 
 @Repository
-public interface InventoryProductsRepository extends JpaRepository<InventoryProducts, Long> {
+public interface InventoryProductsRepository extends JpaRepository<InventoryProducts, BigInteger> {
 	
-	Optional<InventoryProducts> findById(Long id);
+	Optional<InventoryProducts> findById(BigInteger id);
 	
-	void deleteById(Long id);
+	void deleteById(BigInteger id);
 	
 	List<InventoryProducts> findAllByCompany(Company company);
 

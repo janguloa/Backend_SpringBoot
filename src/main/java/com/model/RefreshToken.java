@@ -1,5 +1,6 @@
 package com.model;
 
+import java.math.BigInteger;
 import java.time.Instant;
 
 import javax.persistence.Entity;
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class RefreshToken {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long RefreshId;
+	private BigInteger RefreshId;
 	private String token;
 	private Instant createdDate;
 }

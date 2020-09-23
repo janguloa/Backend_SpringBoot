@@ -1,10 +1,13 @@
 package com.controller;
 
+import static com.model.Operations.ADD;
+import static com.model.Operations.EQUALIZE;
+import static com.model.Operations.SUBTRACT;
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
-import static com.model.Operations.ADD;
-import static com.model.Operations.SUBTRACT;
-import static com.model.Operations.EQUALIZE;
+
+import java.math.BigInteger;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +38,10 @@ public class PurchasesDetailsController {
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/update/{id}")
-	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody PurchasesDetailsDto purchasesDetailsDto) {
+	@PutMapping("/update/{idDet}")
+	public ResponseEntity<Void> update(@PathVariable BigInteger idDet, @RequestBody PurchasesDetailsDto purchasesDetailsDto) {
 		
-		purchasesDetailsDto.setId(id);
+		purchasesDetailsDto.setId(idDet);
 		purchasesDetailsDto.setUpdateType(UPDATE);
 		purchasesDetailsDto.setOperations(EQUALIZE);
 		
@@ -48,7 +51,7 @@ public class PurchasesDetailsController {
 	}
 	
 	@PutMapping("/delete/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PurchasesDetailsDto purchasesDetailsDto) {
+	public ResponseEntity<Void> delete(@PathVariable BigInteger id, @RequestBody PurchasesDetailsDto purchasesDetailsDto) {
 		
 		purchasesDetailsDto.setId(id);
 		purchasesDetailsDto.setUpdateType(DELETE);

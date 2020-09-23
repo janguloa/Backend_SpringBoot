@@ -3,6 +3,7 @@ package com.model;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
+import java.math.BigInteger;
 import java.time.Instant;
 
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ public class Users {
     @Id
 	@SequenceGenerator(name = "USER_SEQ", sequenceName = "USER_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "USER_SEQ")
-    private Long UserId;
+    private BigInteger UserId;
     @NotBlank(message = "Username is required")
     private String username;
     @NotBlank(message = "Password is required")

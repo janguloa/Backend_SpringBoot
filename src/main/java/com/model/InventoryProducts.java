@@ -3,14 +3,16 @@ package com.model;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
+import java.math.BigInteger;
 import java.time.Instant;
-import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +28,7 @@ public class InventoryProducts {
 	@Id
 	@SequenceGenerator(name = "INVPRODUCTS_SEQ", sequenceName = "INVPRODUCTS_SEQ", initialValue = 1, allocationSize=10)
 	@GeneratedValue(strategy = SEQUENCE, generator = "INVPRODUCTS_SEQ")
-	private Long InventoryId;
+	private BigInteger InventoryId;
 	
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "IdProduct", referencedColumnName = "ProductId")

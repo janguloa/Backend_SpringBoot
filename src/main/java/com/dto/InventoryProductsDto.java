@@ -1,6 +1,6 @@
 package com.dto;
 
-import com.model.UpdateType;
+import java.math.BigInteger;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InventoryProductsDto {
 	
-	private Long id;
+	private BigInteger id;
 	private int count;
 	private Double priceSale;
 	private int totalFaulty;
 	private Double discountPercent;
-	private Long idProduct;
-	private Long idCompany;
+	private BigInteger idProduct;
+	private BigInteger idCompany;
 }

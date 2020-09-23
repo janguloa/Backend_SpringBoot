@@ -1,7 +1,8 @@
 package com.repository;
 
-import java.util.Optional;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -10,9 +11,9 @@ import com.model.Company;
 import com.model.Products;
 
 @Repository
-public interface ProductsRepository extends JpaRepository<Products, Long> {
+public interface ProductsRepository extends JpaRepository<Products, BigInteger> {
 	
-	Optional<Products> findById(Long id);
+	Optional<Products> findById(BigInteger id);
 	
 	List<Products> findAllByCompany(Company company);
 	

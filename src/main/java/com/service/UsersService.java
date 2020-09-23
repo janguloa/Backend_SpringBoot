@@ -1,12 +1,12 @@
 package com.service;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
-import com.dto.UsersDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
 import com.model.Users;
@@ -26,7 +26,7 @@ public class UsersService {
 	private final AuthService authService;
 	
 	@Transactional
-	public void updateCompany(Long id) {
+	public void updateCompany(BigInteger id) {
 			
 		Optional<Company> company = companyRepository.findById(id);
 		company.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código" + id));

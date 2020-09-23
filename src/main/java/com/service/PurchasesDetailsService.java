@@ -1,11 +1,15 @@
 package com.service;
 
 import static com.model.UpdateType.UPDATE;
+
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
 
 import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
+
 import com.dto.PurchasesDetailsDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
@@ -43,8 +47,7 @@ public class PurchasesDetailsService {
 				
 		
 		purchasesDetailsRepository.save(PurchasesDetailsToDto(purchasesDetailsDto, company, purchases, products));
-	//	purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), accumCost(purchasesDetailsDto), purchasesDetailsDto.getOperations());
-		
+
 		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), getAllPurchasesDetailsForPurchases(purchasesDetailsDto.getId_purchases()));
 		
 		return purchasesDetailsDto;
@@ -54,7 +57,7 @@ public class PurchasesDetailsService {
 	public PurchasesDetailsDto update(PurchasesDetailsDto purchasesDetailsDto) {
 		
 		fetchPurchasesDetailsAndEnable(purchasesDetailsDto);
-		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), accumCost(purchasesDetailsDto), purchasesDetailsDto.getOperations());
+		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), getAllPurchasesDetailsForPurchases(purchasesDetailsDto.getId_purchases()));
 		
 		return purchasesDetailsDto;
 	}
@@ -101,23 +104,23 @@ public class PurchasesDetailsService {
 		}
 	}
 	
-	private Double accumCost(PurchasesDetailsDto purchasesDetailsDto) {
-		
-		Double unitaryProduct;
-		Double totalProduct;
-		
-		unitaryProduct  = purchasesDetailsDto.getUnitaryCost() + purchasesDetailsDto.getUnitaryShippingCost() + purchasesDetailsDto.getTaxesCost();
-		totalProduct = unitaryProduct * purchasesDetailsDto.getQuantity();
-		return totalProduct;
-	}
+//	private Double accumCost(PurchasesDetailsDto purchasesDetailsDto) {
+//		
+//		Double unitaryProduct;
+//		Double totalProduct;
+//		
+//		unitaryProduct  = purchasesDetailsDto.getUnitaryCost() + purchasesDetailsDto.getUnitaryShippingCost() + purchasesDetailsDto.getTaxesCost();
+//		totalProduct = unitaryProduct * purchasesDetailsDto.getQuantity();
+//		return totalProduct;
+//	}
 	
-	private double getAllPurchasesDetailsForPurchases(Long id) {
+	private double getAllPurchasesDetailsForPurchases(BigInteger id) {
 		
 		double unitaryProduct;
 		double totalProduct;
 		double totalPurchases = 0;
-		
-		List<PurchasesDetails> listaDetails = purchasesDetailsRepository.getAllByPurchases(id);
+			
+		List<PurchasesDetails> listaDetails = purchasesDetailsRepository.getAllByPurchases(id, true);
 		
 		for(PurchasesDetails item: listaDetails) {
 		

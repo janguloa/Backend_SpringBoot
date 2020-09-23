@@ -1,17 +1,21 @@
 package com.service;
 
-import java.time.Instant;
 import static com.model.UpdateType.UPDATE;
-import static com.model.Operations.*;
+
+import java.math.BigInteger;
+import java.time.Instant;
+
 import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
+
 import com.dto.PurchasesDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
-import com.model.Operations;
 import com.model.Purchases;
 import com.repository.CompanyRepository;
 import com.repository.PurchasesRepository;
+
 import lombok.AllArgsConstructor;
 
 @Service
@@ -71,27 +75,27 @@ public class PurchasesService {
 		purchasesRepository.save(purchases);
 	}
 	
-	@Transactional
-	public void updateTotalPrice (Long IdPurchases, Double totalPrice, Operations operations) {
-		
-		Purchases purchases = purchasesRepository.findById(IdPurchases)
-				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + IdPurchases));
-
-		if(ADD.equals(operations)) {
-			
-			purchases.setTotalPrice(purchases.getTotalPrice() + totalPrice);
+//	@Transactional
+//	public void updateTotalPrice (Long IdPurchases, Double totalPrice, Operations operations) {
+//		
+//		Purchases purchases = purchasesRepository.findById(IdPurchases)
+//				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + IdPurchases));
+//
+//		if(ADD.equals(operations)) {
+//			
+//			purchases.setTotalPrice(purchases.getTotalPrice() + totalPrice);
+//	
+//		}
+//		else if(SUBTRACT.equals(operations)) {
+//			
+//			purchases.setTotalPrice(purchases.getTotalPrice() - totalPrice);
+//		}
+//		
+//		purchasesRepository.save(purchases);
+//	}
 	
-		}
-		else if(SUBTRACT.equals(operations)) {
-			
-			purchases.setTotalPrice(purchases.getTotalPrice() - totalPrice);
-		}
-		
-		purchasesRepository.save(purchases);
-	}
-	
 	@Transactional
-	public void updateTotalPrice (Long IdPurchases, Double totalPrice) {
+	public void updateTotalPrice (BigInteger IdPurchases, Double totalPrice) {
 		
 		Purchases purchases = purchasesRepository.findById(IdPurchases)
 				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + IdPurchases));

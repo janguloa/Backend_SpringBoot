@@ -1,5 +1,10 @@
 package com.controller;
 
+import static com.model.UpdateType.DELETE;
+import static com.model.UpdateType.UPDATE;
+
+import java.math.BigInteger;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dto.ProductsDto;
 import com.service.ProductsService;
-import static com.model.UpdateType.DELETE;
-import static com.model.UpdateType.UPDATE;
 
 import lombok.AllArgsConstructor;
 
@@ -33,7 +36,7 @@ public class ProductsController {
 	}	
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody ProductsDto productsDto) {
+	public ResponseEntity<Void> update(@PathVariable BigInteger id, @RequestBody ProductsDto productsDto) {
 		
 		productsDto.setId(id);
 		productsDto.setUpdateType(UPDATE);
@@ -43,7 +46,7 @@ public class ProductsController {
 	}
 	
 	@PutMapping("/delete/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody ProductsDto productsDto) {
+	public ResponseEntity<Void> delete(@PathVariable BigInteger id, @RequestBody ProductsDto productsDto) {
 		
 		productsDto.setId(id);
 		productsDto.setUpdateType(DELETE);

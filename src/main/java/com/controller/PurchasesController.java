@@ -3,6 +3,8 @@ package com.controller;
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
 
+import java.math.BigInteger;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +36,7 @@ public class PurchasesController {
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody PurchasesDto purchasesDto) {
+	public ResponseEntity<Void> update(@PathVariable BigInteger id, @RequestBody PurchasesDto purchasesDto) {
 		
 		purchasesDto.setId(id);
 		purchasesDto.setUpdateType(UPDATE);
@@ -44,7 +46,7 @@ public class PurchasesController {
 	}
 	
 	@PutMapping("/delete/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id, @RequestBody PurchasesDto purchasesDto) {
+	public ResponseEntity<Void> delete(@PathVariable BigInteger id, @RequestBody PurchasesDto purchasesDto) {
 		
 		purchasesDto.setId(id);
 		purchasesDto.setUpdateType(DELETE);

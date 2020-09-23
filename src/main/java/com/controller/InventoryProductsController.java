@@ -1,5 +1,7 @@
 package com.controller;
 
+import java.math.BigInteger;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +35,7 @@ public class InventoryProductsController {
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody InventoryProductsDto inventoryProductsDto) {
+	public ResponseEntity<Void> update(@PathVariable BigInteger id, @RequestBody InventoryProductsDto inventoryProductsDto) {
 		
 		inventoryProductsDto.setId(id);
 		inventoryProductsService.update(inventoryProductsDto);
@@ -42,7 +44,7 @@ public class InventoryProductsController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Void> delete (@PathVariable Long id, @RequestBody InventoryProductsDto inventoryProductsDto) {
+	public ResponseEntity<Void> delete (@PathVariable BigInteger id, @RequestBody InventoryProductsDto inventoryProductsDto) {
 		
 		inventoryProductsDto.setId(id);
 		inventoryProductsService.delete(inventoryProductsDto);

@@ -1,5 +1,7 @@
 package com.dto;
 
+import java.math.BigInteger;
+
 import com.model.UpdateType;
 
 import lombok.AllArgsConstructor;
@@ -11,9 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PurchasesDto {
 	
-	private Long id;
+	private BigInteger id;
 	private String description;
-	private Long id_company; 
+	private BigInteger id_company; 
 	private UpdateType updateType;
 
 }
