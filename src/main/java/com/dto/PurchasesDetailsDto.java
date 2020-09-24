@@ -17,6 +17,7 @@ public class PurchasesDetailsDto {
 	private BigInteger id;
 	private String description;
 	private int quantity;
+	private int totalFaulty;
 	private Double unitaryCost;
 	private Double unitaryShippingCost;
 	private Double taxesCost;

@@ -15,6 +15,8 @@ public interface ProductsRepository extends JpaRepository<Products, BigInteger> 
 	
 	Optional<Products> findById(BigInteger id);
 	
+	Optional<Products> findByCodproduct(String code);
+	
 	List<Products> findAllByCompany(Company company);
 	
 }

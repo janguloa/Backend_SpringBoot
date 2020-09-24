@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
@@ -32,6 +33,14 @@ public class Products {
 	private BigInteger ProductId;
 	private String codproduct;
 	private String description;
+	private int totalStock;
+	private int reOrderStock;
+	private Double priceSale;
+	private Double cost;
+	private int totalFaulty;
+	private Double discountPercent;
+	@Lob
+	private byte[] imagen;
 	private boolean enabled;
 	private Instant createdDate;
 	@ManyToOne(fetch = LAZY)

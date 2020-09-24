@@ -32,6 +32,8 @@ public class PurchasesDetails {
 	private BigInteger PurchasesDetId;
 	private String description;
 	private int quantity;
+	private int quantity_sales;
+	private int totalFaulty;
 	private Double unitaryCost;
 	private Double unitaryShippingCost;
 	private Double taxesCost;

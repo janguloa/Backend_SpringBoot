@@ -2,7 +2,6 @@ package com.service;
 
 import static com.model.UpdateType.UPDATE;
 import static com.model.Operations.ENABLED;
-
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.dto.PurchasesDetailsDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
-import com.model.Operations;
 import com.model.Products;
 import com.model.Purchases;
 import com.model.PurchasesDetails;
@@ -34,6 +32,7 @@ public class PurchasesDetailsService {
 	private final PurchasesRepository purchasesRepository;
 	private final ProductsRepository productsRepository;
 	private final PurchasesService purchasesService;
+	private final ProductsService productsService;
 	
 	@Transactional
 	public PurchasesDetailsDto save(PurchasesDetailsDto purchasesDetailsDto) {
@@ -51,6 +50,10 @@ public class PurchasesDetailsService {
 		purchasesDetailsRepository.save(PurchasesDetailsToDto(purchasesDetailsDto, company, purchases, products));
 
 		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), getAllPurchasesDetailsForPurchases(purchasesDetailsDto.getId_purchases()));
+		
+		purchasesDetailsDto.setOperations(ENABLED);
+		
+		addPurchasesDetails(purchasesDetailsDto);
 		
 		return purchasesDetailsDto;
 	}
@@ -70,6 +73,7 @@ public class PurchasesDetailsService {
 				.description(purchasesDetailsDto.getDescription())
 				.unitaryCost(purchasesDetailsDto.getUnitaryCost())
 				.quantity(purchasesDetailsDto.getQuantity())
+				.totalFaulty(purchasesDetailsDto.getTotalFaulty())
 				.unitaryShippingCost(purchasesDetailsDto.getUnitaryShippingCost())
 				.taxesCost(purchasesDetailsDto.getTaxesCost())
 				.createdate(Instant.now())
@@ -102,8 +106,7 @@ public class PurchasesDetailsService {
 			purchasesDetailsDto.setUnitaryShippingCost(purchasesDetails.getUnitaryShippingCost());
 			purchasesDetailsDto.setTaxesCost(purchasesDetails.getTaxesCost());
 			purchasesDetailsDto.setQuantity(purchasesDetails.getQuantity());
-			purchasesDetails.setEnabled(false);
-			
+			purchasesDetails.setEnabled(false);	
 		}
 	}
 	
@@ -122,25 +125,29 @@ public class PurchasesDetailsService {
 			
 			totalPurchases += totalProduct;
 		}
-		
 		return 	totalPurchases;
 	}
 	
 	@Transactional
-	public void updateAssigned(BigInteger IdPurchasesDet, Operations operations) {
+	public void addPurchasesDetails(PurchasesDetailsDto purchasesDetailsDto) {
 		
-		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findById(IdPurchasesDet)
-				.orElseThrow(() -> new SpringInventoryException("EL detalle de compra no fue encontrado con el codigo " + IdPurchasesDet));
+		Products products = productsRepository.findById(purchasesDetailsDto.getId_product())
+				.orElseThrow(() -> new SpringInventoryException("El producto no fue encontrado con el siguiente codigo " + purchasesDetailsDto.getId_product()));
+		
+		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByProductsAndAssigned(products, false)
+				.orElseThrow(() -> new SpringInventoryException("El detalle de compra no tiene disponible el producto con el siguiente codigo " + purchasesDetailsDto.getId_product()));
+		
+		products.setTotalStock(getTotalStock(purchasesDetailsDto.getTotalFaulty(), purchasesDetailsDto.getQuantity()));
+		products.setCost(purchasesDetails.fetchCost());
+		products.setTotalFaulty(purchasesDetailsDto.getTotalFaulty());
+		
+		productsRepository.save(products);
+		
+		productsService.updateAssigned(purchasesDetails.getPurchasesDetId(), purchasesDetailsDto.getOperations());
+	}
 
-			if (ENABLED.equals(operations)) {
-				
-				purchasesDetails.setAssigned(true);
-			}
-			else 
-			{
-				purchasesDetails.setAssigned(false);
-			}
+	private int getTotalStock(int totalFaulty, int count) {
 		
-			purchasesDetailsRepository.save(purchasesDetails);
+		return count - totalFaulty;
 	}
 }

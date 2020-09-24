@@ -2,6 +2,8 @@ package com.controller;
 
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
+import static com.model.Operations.ENABLED;
+import static com.model.Operations.DISABLED;
 
 import java.math.BigInteger;
 
@@ -30,6 +32,7 @@ public class ProductsController {
 	@PostMapping("/create")
 	public ResponseEntity<Void> create(@RequestBody ProductsDto productsDto) {
 		
+		productsDto.setOperations(ENABLED);
 		productsService.save(productsDto);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -50,6 +53,7 @@ public class ProductsController {
 		
 		productsDto.setId(id);
 		productsDto.setUpdateType(DELETE);
+		productsDto.setOperations(DISABLED);
 		productsService.update(productsDto);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
