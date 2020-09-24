@@ -88,8 +88,8 @@ public class PurchasesDetailsService {
 	@Transactional
 	private void fetchPurchasesDetailsAndEnable (PurchasesDetailsDto purchasesDetailsDto) {
 		
-		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findById(purchasesDetailsDto.getId())
-				.orElseThrow(() -> new SpringInventoryException("El detalle de compra no fue encontrado con el siguiente codigo " + purchasesDetailsDto.getId()));
+		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByIdAndAssigned(purchasesDetailsDto.getId(), false)
+				.orElseThrow(() -> new SpringInventoryException("El detalle de compra ya fue asignado a un producto, por ende no se puede gestionar " + purchasesDetailsDto.getId()));
 		
 		if(UPDATE.equals(purchasesDetailsDto.getUpdateType())) {
 			
@@ -137,17 +137,21 @@ public class PurchasesDetailsService {
 		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByProductsAndAssigned(products, false)
 				.orElseThrow(() -> new SpringInventoryException("El detalle de compra no tiene disponible el producto con el siguiente codigo " + purchasesDetailsDto.getId_product()));
 		
-		products.setTotalStock(getTotalStock(purchasesDetailsDto.getTotalFaulty(), purchasesDetailsDto.getQuantity()));
+		products.setTotalStock(getTotalStock(purchasesDetailsDto.getTotalFaulty(), purchasesDetailsDto.getQuantity(), products.getTotalStock()));
 		products.setCost(purchasesDetails.fetchCost());
-		products.setTotalFaulty(purchasesDetailsDto.getTotalFaulty());
+		products.setTotalFaulty(products.getTotalFaulty() + purchasesDetailsDto.getTotalFaulty());
 		
 		productsRepository.save(products);
 		
 		productsService.updateAssigned(purchasesDetails.getPurchasesDetId(), purchasesDetailsDto.getOperations());
 	}
 
-	private int getTotalStock(int totalFaulty, int count) {
+	private int getTotalStock(int totalFaulty, int count, int quantity) {
 		
-		return count - totalFaulty;
+		int quantityProducts;
+		
+		quantityProducts = quantity + (count - totalFaulty);
+		
+		return quantityProducts;
 	}
 }

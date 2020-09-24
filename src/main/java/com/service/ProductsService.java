@@ -67,10 +67,7 @@ public class ProductsService {
 		
 		Products products = productsRepository.findById(productsDto.getId())
 				.orElseThrow(() -> new SpringInventoryException("El producto no fue encontrado con el siguiente codigo " + productsDto.getId()));
-		
-		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByProductsAndAssigned(products, true)
-				.orElseThrow(() -> new SpringInventoryException("El detalle de compra no tiene disponible el producto con el siguiente codigo " + productsDto.getId()));
-		
+			
 		if(UPDATE.equals(productsDto.getUpdateType())) {
 			
 			products.setDescription(productsDto.getDescription().toUpperCase());
@@ -80,7 +77,6 @@ public class ProductsService {
 		} 
 		else {
 			products.setEnabled(false);
-			updateAssigned(purchasesDetails.getPurchasesDetId(), productsDto.getOperations());
 		}
 		
 		productsRepository.save(products);

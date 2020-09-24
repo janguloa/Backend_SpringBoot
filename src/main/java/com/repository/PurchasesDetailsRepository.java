@@ -14,6 +14,8 @@ import com.model.PurchasesDetails;
 public interface PurchasesDetailsRepository extends JpaRepository<PurchasesDetails, BigInteger> {
 	
 	Optional<PurchasesDetails> findById(BigInteger id);
+	
+	Optional<PurchasesDetails> findByIdAndAssigned(BigInteger id, boolean assigned);
 
 	Optional<PurchasesDetails> findByProducts(Products products);
 	
