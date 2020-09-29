@@ -45,7 +45,7 @@ public class PurchasesDetailsController {
 		purchasesDetailsDto.setUpdateType(UPDATE);
 		purchasesDetailsDto.setOperations(EQUALIZE);
 		
-		purchasesDetailsService.update(purchasesDetailsDto);
+	//	purchasesDetailsService.update(purchasesDetailsDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
@@ -57,7 +57,7 @@ public class PurchasesDetailsController {
 		purchasesDetailsDto.setUpdateType(DELETE);
 		purchasesDetailsDto.setOperations(SUBTRACT);
 		
-		purchasesDetailsService.update(purchasesDetailsDto);
+	//	purchasesDetailsService.update(purchasesDetailsDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}

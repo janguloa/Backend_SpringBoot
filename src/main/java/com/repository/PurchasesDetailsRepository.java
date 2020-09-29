@@ -3,11 +3,9 @@ package com.repository;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import com.model.Products;
 import com.model.PurchasesDetails;
 
@@ -15,7 +13,9 @@ public interface PurchasesDetailsRepository extends JpaRepository<PurchasesDetai
 	
 	Optional<PurchasesDetails> findById(BigInteger id);
 	
-	Optional<PurchasesDetails> findByIdAndAssigned(BigInteger id, boolean assigned);
+//	Optional<PurchasesDetails> findByPurchasesDetIdAndAssigned(BigInteger id, boolean state);
+	
+//	Optional<PurchasesDetails> findByPurchasesDetId(BigInteger id);
 
 	Optional<PurchasesDetails> findByProducts(Products products);
 	

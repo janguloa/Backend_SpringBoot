@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dto.ProductsDto;
 import com.dto.SalesDto;
+import com.service.SalesServices;
 
 import lombok.AllArgsConstructor;
 
@@ -20,10 +21,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SalesController {
 	
+	private final SalesServices salesServices;
+	
 	@PostMapping("/create")
 	public ResponseEntity<Void> create(@RequestBody SalesDto salesDto) {
 		
 		//Llamar a servicio
+		
+		salesServices.create(salesDto);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
