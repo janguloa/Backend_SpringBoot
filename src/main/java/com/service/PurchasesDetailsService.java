@@ -53,19 +53,19 @@ public class PurchasesDetailsService {
 		
 		purchasesDetailsDto.setOperations(ENABLED);
 		
-		//addPurchasesDetails(purchasesDetailsDto);
+		addPurchasesDetails(purchasesDetailsDto);
 		
 		return purchasesDetailsDto;
 	}
 	
-//	@Transactional
-//	public PurchasesDetailsDto update(PurchasesDetailsDto purchasesDetailsDto) {
-//		
-//		fetchPurchasesDetailsAndEnable(purchasesDetailsDto);
-//		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), getAllPurchasesDetailsForPurchases(purchasesDetailsDto.getId_purchases()));
-//		
-//		return purchasesDetailsDto;
-//	}
+	@Transactional
+	public PurchasesDetailsDto update(PurchasesDetailsDto purchasesDetailsDto) {
+		
+		fetchPurchasesDetailsAndEnable(purchasesDetailsDto);
+		purchasesService.updateTotalPrice(purchasesDetailsDto.getId_purchases(), getAllPurchasesDetailsForPurchases(purchasesDetailsDto.getId_purchases()));
+		
+		return purchasesDetailsDto;
+	}
 	
 	private PurchasesDetails PurchasesDetailsToDto (PurchasesDetailsDto purchasesDetailsDto, Company company, Purchases purchases, Products products) {
 		
@@ -85,30 +85,30 @@ public class PurchasesDetailsService {
 				.build();
 	}	
 	
-//	@Transactional
-//	private void fetchPurchasesDetailsAndEnable (PurchasesDetailsDto purchasesDetailsDto) {
-//		
-//		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByIdAndAssigned(purchasesDetailsDto.getId(), false)
-//				.orElseThrow(() -> new SpringInventoryException("El detalle de compra ya fue asignado a un producto, por ende no se puede gestionar " + purchasesDetailsDto.getId()));
-//		
-//		if(UPDATE.equals(purchasesDetailsDto.getUpdateType())) {
-//			
-//			purchasesDetails.setDescription(purchasesDetailsDto.getDescription());
-//			purchasesDetails.setQuantity(purchasesDetailsDto.getQuantity());
-//			purchasesDetails.setTaxesCost(purchasesDetailsDto.getTaxesCost());
-//			purchasesDetails.setUnitaryCost(purchasesDetailsDto.getUnitaryCost());
-//			purchasesDetails.setUnitaryShippingCost(purchasesDetailsDto.getUnitaryShippingCost());
-//			
-//		} else {
-//			
-//			purchasesDetailsDto.setId_purchases(purchasesDetails.getPurchases().getPurchasesId());
-//			purchasesDetailsDto.setUnitaryCost(purchasesDetails.getUnitaryCost());
-//			purchasesDetailsDto.setUnitaryShippingCost(purchasesDetails.getUnitaryShippingCost());
-//			purchasesDetailsDto.setTaxesCost(purchasesDetails.getTaxesCost());
-//			purchasesDetailsDto.setQuantity(purchasesDetails.getQuantity());
-//			purchasesDetails.setEnabled(false);	
-//		}
-//	}
+	@Transactional
+	private void fetchPurchasesDetailsAndEnable (PurchasesDetailsDto purchasesDetailsDto) {
+		
+		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findByIdAndAssignedQuery(purchasesDetailsDto.getId(), false)
+				.orElseThrow(() -> new SpringInventoryException("El detalle de compra ya fue asignado a un producto, por ende no se puede gestionar " + purchasesDetailsDto.getId()));
+		
+		if(UPDATE.equals(purchasesDetailsDto.getUpdateType())) {
+			
+			purchasesDetails.setDescription(purchasesDetailsDto.getDescription());
+			purchasesDetails.setQuantity(purchasesDetailsDto.getQuantity());
+			purchasesDetails.setTaxesCost(purchasesDetailsDto.getTaxesCost());
+			purchasesDetails.setUnitaryCost(purchasesDetailsDto.getUnitaryCost());
+			purchasesDetails.setUnitaryShippingCost(purchasesDetailsDto.getUnitaryShippingCost());
+			
+		} else {
+			
+			purchasesDetailsDto.setId_purchases(purchasesDetails.getPurchases().getPurchasesId());
+			purchasesDetailsDto.setUnitaryCost(purchasesDetails.getUnitaryCost());
+			purchasesDetailsDto.setUnitaryShippingCost(purchasesDetails.getUnitaryShippingCost());
+			purchasesDetailsDto.setTaxesCost(purchasesDetails.getTaxesCost());
+			purchasesDetailsDto.setQuantity(purchasesDetails.getQuantity());
+			purchasesDetails.setEnabled(false);	
+		}
+	}
 	
 	private double getAllPurchasesDetailsForPurchases(BigInteger id) {
 		

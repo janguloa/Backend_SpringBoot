@@ -13,9 +13,8 @@ public interface PurchasesDetailsRepository extends JpaRepository<PurchasesDetai
 	
 	Optional<PurchasesDetails> findById(BigInteger id);
 	
-//	Optional<PurchasesDetails> findByPurchasesDetIdAndAssigned(BigInteger id, boolean state);
-	
-//	Optional<PurchasesDetails> findByPurchasesDetId(BigInteger id);
+	@Query(value="SELECT e from purchases_details e WHERE e.purchases_det_id = :id_det_purchases AND m.assigned = :id_assigned",  nativeQuery=true)
+	Optional<PurchasesDetails> findByIdAndAssignedQuery(@Param("id_det_purchases") BigInteger id_det_purchases, @Param("id_assigned") boolean assigned);
 
 	Optional<PurchasesDetails> findByProducts(Products products);
 	

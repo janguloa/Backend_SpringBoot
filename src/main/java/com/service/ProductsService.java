@@ -55,6 +55,7 @@ public class ProductsService {
 				.reOrderStock(productsDto.getReOrderStock())
 				.priceSale(productsDto.getPriceSale())
 				.discountPercent(productsDto.getDiscountPercent())
+				.cost(0.0)
 				.company(company)
 				.createdDate(Instant.now())
 				.user(authService.getCurrentUser())
