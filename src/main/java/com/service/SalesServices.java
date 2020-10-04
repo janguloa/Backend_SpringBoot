@@ -42,7 +42,7 @@ public class SalesServices {
 		Customer customer = customerRepository.findById(salesDto.getId_customer())
 				.orElseThrow(() -> new SpringInventoryException("El cliente no fue encontrado con el siguiente codigo " + salesDto.getId_customer()));
 		
-		
+		salesDto.setUnitaryPrice(products.getPriceSale());
 		salesRepository.save(mapToSales(salesDto, company, products, customer));		
 		
 		return salesDto;
@@ -61,10 +61,15 @@ public class SalesServices {
 				.receipt(salesDto.getReceipt())
 				.quantity(salesDto.getQuantity())
 				.unitaryPrice(salesDto.getUnitaryPrice())
-				.totalprice(salesDto.getTotalprice())
+				.totalprice(getTotalPrice(salesDto.getQuantity(), salesDto.getUnitaryPrice()))
 				.company(company)
 				.products(products)
 				.customer(customer)
 				.build();
+	}
+	
+	private double getTotalPrice(double quantity, double unitaryPrice) {
+		
+		return quantity * unitaryPrice;
 	}
 }
