@@ -29,6 +29,7 @@ public class SalesServices {
 	private final CompanyRepository companyRepository;
 	private final ProductsRepository productsRepository;
 	private final CustomerRepository customerRepository;
+	private final ProductsService productsService;
 	
 	@Transactional
 	public SalesDto create(SalesDto salesDto) {
@@ -43,7 +44,8 @@ public class SalesServices {
 				.orElseThrow(() -> new SpringInventoryException("El cliente no fue encontrado con el siguiente codigo " + salesDto.getId_customer()));
 		
 		salesDto.setUnitaryPrice(products.getPriceSale());
-		salesRepository.save(mapToSales(salesDto, company, products, customer));		
+		salesRepository.save(mapToSales(salesDto, company, products, customer));
+		productsService.updateStock(salesDto.getQuantity(), products);
 		
 		return salesDto;
 	}

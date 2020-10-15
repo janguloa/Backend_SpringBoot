@@ -100,4 +100,13 @@ public class ProductsService {
 		
 			purchasesDetailsRepository.save(purchasesDetails);
 	}
+	
+	@Transactional
+	public void updateStock(int Quantity, Products products) {
+		
+		products.setTotalStock(products.getTotalStock() - Quantity);
+		
+		productsRepository.save(products);
+		
+	}	
 }
