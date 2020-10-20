@@ -31,6 +31,7 @@ public class Sales {
 	private int quantity;
 	private Double unitaryPrice;
 	private Double totalprice;
+	private boolean enabled;
 	
 	@ManyToOne(fetch = LAZY)
 	@JoinColumn(name = "IdCompany", referencedColumnName = "CompanyId")

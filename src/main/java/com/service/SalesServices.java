@@ -45,7 +45,7 @@ public class SalesServices {
 		
 		salesDto.setUnitaryPrice(products.getPriceSale());
 		salesRepository.save(mapToSales(salesDto, company, products, customer));
-		productsService.updateStock(salesDto.getQuantity(), products);
+		productsService.updateStock(salesDto.getQuantity(), products, 1);
 		
 		return salesDto;
 	}
@@ -53,6 +53,11 @@ public class SalesServices {
 	@Transactional
 	public SalesDto cancel(SalesDto salesDto) {
 		
+		Products products = productsRepository.findById(salesDto.getId_product())
+				.orElseThrow(() -> new SpringInventoryException("Producto no encontrada con el código " + salesDto.getId_product()));
+		
+		fetchUpdateSales(salesDto);
+		productsService.updateStock(salesDto.getQuantity(), products, 0);
 		return salesDto;
 	}
 	
@@ -67,7 +72,17 @@ public class SalesServices {
 				.company(company)
 				.products(products)
 				.customer(customer)
+				.enabled(true)
 				.build();
+	}
+	
+	private void fetchUpdateSales(SalesDto salesDto) {
+		
+		Sales sales = salesRepository.findById(salesDto.getId())
+				.orElseThrow(() -> new SpringInventoryException("La venta no fue encontrado con el siguiente codigo " + salesDto.getId()));
+		
+		sales.setEnabled(false);
+		
 	}
 	
 	private double getTotalPrice(double quantity, double unitaryPrice) {

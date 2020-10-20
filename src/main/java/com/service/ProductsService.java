@@ -5,6 +5,8 @@ import static com.model.Operations.ENABLED;
 
 import java.math.BigInteger;
 import java.time.Instant;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import com.dto.ProductsDto;
@@ -32,8 +34,12 @@ public class ProductsService {
 	public ProductsDto save(ProductsDto productsDto) {
 		
 		Company company = companyRepository.findById(productsDto.getId_company())
-				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código" + productsDto.getId_company()));
+				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código " + productsDto.getId_company()));
 		
+		Optional<Products> products = productsRepository.findByCodproduct(productsDto.getCodproduct());
+				
+		products.ifPresent(u -> new SpringInventoryException("El codigo de producto ya esta registrado " + u.getCodproduct()));
+				
 		productsRepository.save(ProductsDto(productsDto, company));
 		
 		return productsDto;
@@ -102,9 +108,16 @@ public class ProductsService {
 	}
 	
 	@Transactional
-	public void updateStock(int Quantity, Products products) {
+	public void updateStock(int Quantity, Products products, int operator) {
 		
-		products.setTotalStock(products.getTotalStock() - Quantity);
+		if (operator == 0)
+		{
+			products.setTotalStock(products.getTotalStock() + Quantity);
+		}
+		else
+		{
+			products.setTotalStock(products.getTotalStock() - Quantity);
+		}
 		
 		productsRepository.save(products);
 		

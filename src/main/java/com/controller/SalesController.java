@@ -34,9 +34,10 @@ public class SalesController {
 	}
 	
 	@PostMapping("/cancel/{id}")
-	public ResponseEntity<Void> cancel(@PathVariable BigInteger id, @RequestBody ProductsDto productsDto){
+	public ResponseEntity<Void> cancel(@PathVariable BigInteger id, @RequestBody SalesDto salesDto){
 		
-		//Llamar a servicio
+		salesDto.setId(id);
+		salesServices.cancel(salesDto);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
