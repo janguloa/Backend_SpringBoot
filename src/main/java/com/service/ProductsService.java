@@ -37,11 +37,14 @@ public class ProductsService {
 				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código " + productsDto.getId_company()));
 		
 		Optional<Products> products = productsRepository.findByCodproduct(productsDto.getCodproduct());
-				
-		products.ifPresent(u -> new SpringInventoryException("El codigo de producto ya esta registrado " + u.getCodproduct()));
-				
-		productsRepository.save(ProductsDto(productsDto, company));
-		
+			
+		if(products.isPresent()) {
+			
+			throw new SpringInventoryException("El codigo de producto ya esta registrado " + productsDto.getCodproduct());		
+		}
+		else {	
+			productsRepository.save(ProductsDto(productsDto, company));		
+		}	
 		return productsDto;
 	}
 	
