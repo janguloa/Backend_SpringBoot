@@ -2,11 +2,14 @@ package com.controller;
 
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
+import static org.springframework.http.ResponseEntity.status;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -52,5 +55,17 @@ public class CompanyController {
 		companyService.update(companyDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<CompanyDto>> getAllCompany() {
+		
+		return status(HttpStatus.OK).body(companyService.getAllCompany());
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<CompanyDto> getCompany(@PathVariable BigInteger id){
+		
+		return status(HttpStatus.OK).body(companyService.getPost(id));
 	}
 }

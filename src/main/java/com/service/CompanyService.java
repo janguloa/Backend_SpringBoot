@@ -1,13 +1,15 @@
 package com.service;
 
 import static com.model.UpdateType.UPDATE;
+import static java.util.stream.Collectors.toList;
 
+import java.math.BigInteger;
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.controller.UsersController;
 import com.dto.CompanyDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
@@ -59,6 +61,27 @@ public class CompanyService {
 			company.setEnabled(false);
 		}
 		companyRepository.save(company);
+	}
+	
+	public List<CompanyDto> getAllCompany(){
+		
+		return companyRepository.findAll().stream().map(this::mapToDto).collect(toList());
+	}
+	
+	public CompanyDto getPost(BigInteger id) {
+		
+		Company company = companyRepository.findById(id)
+				.orElseThrow(() -> new SpringInventoryException("Compañia no encontrada con el código" + id));
+		
+		return mapToDto(company);
+	}
+	
+	private CompanyDto mapToDto(Company company) {
+		
+		return CompanyDto.builder()
+				.id(company.getCompanyId())
+				.description(company.getDescription())
+				.build();
 	}
 	
 	private Company mapToCompany(CompanyDto companyDto) {
