@@ -1,14 +1,17 @@
 package com.controller;
 
+import static com.model.Operations.DISABLED;
+import static com.model.Operations.ENABLED;
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
-import static com.model.Operations.ENABLED;
-import static com.model.Operations.DISABLED;
+import static org.springframework.http.ResponseEntity.status;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,5 +60,18 @@ public class ProductsController {
 		productsService.update(productsDto);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping
+	public ResponseEntity <List<ProductsDto>> getAllProducts() {
+		
+		return status(HttpStatus.OK).body(productsService.getAllProducts());
+		
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity <ProductsDto> getProductsId(@PathVariable BigInteger id){
+		
+		return status(HttpStatus.OK).body(productsService.getProductsId(id));
 	}
 }

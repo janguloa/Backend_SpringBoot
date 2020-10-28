@@ -1,14 +1,18 @@
 package com.service;
 
-import static com.model.UpdateType.UPDATE;
 import static com.model.Operations.ENABLED;
+import static com.model.UpdateType.UPDATE;
+import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
+
 import com.dto.ProductsDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Company;
@@ -56,6 +60,19 @@ public class ProductsService {
 		return productsDto;
 	}
 	
+	public List<ProductsDto> getAllProducts() {
+		
+		return productsRepository.findAll().stream().map(this::mapToDto).collect(toList());
+	}
+	
+	public ProductsDto getProductsId(BigInteger id) {
+		
+		Products products = productsRepository.findById(id)
+				.orElseThrow(() -> new SpringInventoryException("El codigo del producto no existe " + id));
+		
+		return mapToDto(products);
+	}
+	
 	private Products ProductsDto(ProductsDto productsDto, Company company) {
 		
 		return Products.builder()
@@ -69,6 +86,20 @@ public class ProductsService {
 				.createdDate(Instant.now())
 				.user(authService.getCurrentUser())
 				.enabled(true)
+				.build();
+	}
+	
+	private ProductsDto mapToDto(Products products) {
+		
+		return ProductsDto.builder()
+				.id(products.getProductId())
+				.codproduct(products.getCodproduct())
+				.description(products.getDescription())
+				.priceSale(products.getPriceSale())
+				.reOrderStock(products.getReOrderStock())
+				.totalFaulty(products.getTotalFaulty())
+				.discountPercent(products.getDiscountPercent())
+				.id_company(products.getCompany().getCompanyId())
 				.build();
 	}
 	

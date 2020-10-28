@@ -1,13 +1,22 @@
 package com.service;
 
-import java.time.Instant;
 import static com.model.UpdateType.UPDATE;
+
+import java.time.Instant;
+import java.util.List;
+
 import javax.transaction.Transactional;
+import static java.util.stream.Collectors.toList;
+
+import java.math.BigInteger;
+
 import org.springframework.stereotype.Service;
+
 import com.dto.CustomerDto;
 import com.exceptions.SpringInventoryException;
 import com.model.Customer;
 import com.repository.CustomerRepository;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +41,19 @@ public class CustomerService {
 		fetchCustomerandEnable(customerDto);
 		
 		return customerDto;
+	}
+	
+	public List<CustomerDto> getAllCustomer() {
+		
+		return customerRepository.findAll().stream().map(this::mapToDto).collect(toList());
+	}
+	
+	public CustomerDto getCompanyId(BigInteger id) {
+		
+		Customer customer = customerRepository.findById(id)
+				.orElseThrow(() -> new SpringInventoryException("El cliente no fue encontrado con el siguiente codigo " + id));
+		
+		return mapToDto(customer);
 	}
 
 	private Customer maptoCustomer(CustomerDto customerDto) {
@@ -62,5 +84,16 @@ public class CustomerService {
 		}
 		
 		customerRepository.save(customer);
+	}
+	
+	private CustomerDto mapToDto(Customer customer) {
+		
+		return CustomerDto.builder()
+				.id(customer.getCustomerId())
+				.customerIdent(customer.getCustomerIdent())
+				.names(customer.getNames())
+				.email(customer.getEmail())
+				.telephone(customer.getTelephone())
+				.build();
 	}
 }
