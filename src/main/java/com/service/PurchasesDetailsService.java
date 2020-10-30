@@ -5,7 +5,7 @@ import static com.model.Operations.ENABLED;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
-
+import static java.util.stream.Collectors.toList;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -67,6 +67,20 @@ public class PurchasesDetailsService {
 		return purchasesDetailsDto;
 	}
 	
+	public List<PurchasesDetailsDto> getAllPurchasesDetails(){
+		
+		return purchasesDetailsRepository.findAll().stream().map(this::mapToDto).collect(toList());
+	}
+	
+	public PurchasesDetailsDto getPurchasesDetailsbyId(BigInteger id) {
+		
+		PurchasesDetails purchasesDetails = purchasesDetailsRepository.findById(id)
+				.orElseThrow(() -> new SpringInventoryException("Producto no encontrada con el código " + id));
+		
+		return mapToDto(purchasesDetails);
+		
+	}
+	
 	private PurchasesDetails PurchasesDetailsToDto (PurchasesDetailsDto purchasesDetailsDto, Company company, Purchases purchases, Products products) {
 		
 		return PurchasesDetails.builder()
@@ -84,6 +98,21 @@ public class PurchasesDetailsService {
 				.assigned(false)
 				.build();
 	}	
+	
+	private PurchasesDetailsDto mapToDto(PurchasesDetails purchasesDetails) {
+		
+		return PurchasesDetailsDto.builder()
+				.id(purchasesDetails.getPurchasesDetId())
+				.description(purchasesDetails.getDescription())
+				.quantity(purchasesDetails.getQuantity())
+				.totalFaulty(purchasesDetails.getTotalFaulty())
+				.unitaryCost(purchasesDetails.getUnitaryCost())
+				.unitaryShippingCost(purchasesDetails.getUnitaryShippingCost())
+				.id_company(purchasesDetails.getCompany().getCompanyId())
+				.id_purchases(purchasesDetails.getPurchases().getPurchasesId())
+				.id_product(purchasesDetails.getProducts().getProductId())
+				.build();
+	}
 	
 	@Transactional
 	private void fetchPurchasesDetailsAndEnable (PurchasesDetailsDto purchasesDetailsDto) {

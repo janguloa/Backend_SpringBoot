@@ -5,11 +5,14 @@ import static com.model.Operations.EQUALIZE;
 import static com.model.Operations.SUBTRACT;
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
+import static org.springframework.http.ResponseEntity.status;
 
 import java.math.BigInteger;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,7 +48,7 @@ public class PurchasesDetailsController {
 		purchasesDetailsDto.setUpdateType(UPDATE);
 		purchasesDetailsDto.setOperations(EQUALIZE);
 		
-	//	purchasesDetailsService.update(purchasesDetailsDto);
+		purchasesDetailsService.update(purchasesDetailsDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
@@ -57,8 +60,20 @@ public class PurchasesDetailsController {
 		purchasesDetailsDto.setUpdateType(DELETE);
 		purchasesDetailsDto.setOperations(SUBTRACT);
 		
-	//	purchasesDetailsService.update(purchasesDetailsDto);
+		purchasesDetailsService.update(purchasesDetailsDto);
 		
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	
+	@GetMapping
+	public ResponseEntity <List<PurchasesDetailsDto>> getAllPurchasesDetails(){
+		
+		return status(HttpStatus.OK).body(purchasesDetailsService.getAllPurchasesDetails());
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity <PurchasesDetailsDto> getPurchasesDetailsById(@PathVariable BigInteger id){
+		
+		return status(HttpStatus.OK).body(purchasesDetailsService.getPurchasesDetailsbyId(id));
 	}
 }
