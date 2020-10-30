@@ -5,10 +5,8 @@ import static com.model.Operations.ENABLED;
 import static com.model.UpdateType.DELETE;
 import static com.model.UpdateType.UPDATE;
 import static org.springframework.http.ResponseEntity.status;
-
 import java.math.BigInteger;
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.dto.ProductsDto;
 import com.service.ProductsService;
-
 import lombok.AllArgsConstructor;
 
 @RestController

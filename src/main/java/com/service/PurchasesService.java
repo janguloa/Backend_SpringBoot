@@ -1,9 +1,11 @@
 package com.service;
 
 import static com.model.UpdateType.UPDATE;
+import static java.util.stream.Collectors.toList;
 
 import java.math.BigInteger;
 import java.time.Instant;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -45,6 +47,19 @@ public class PurchasesService {
 		return purchasesDto;
 	}
 	
+	public List<PurchasesDto> getAllPurchases(){
+		
+		return purchasesRepository.findAll().stream().map(this::mapToDto).collect(toList());
+	}
+	
+	public PurchasesDto getPurchasesId(BigInteger id) {
+		
+		Purchases purchases = purchasesRepository.findById(id)
+				.orElseThrow(() -> new SpringInventoryException("Compra no encontrada con el código" + id ));
+		
+		return mapToDto(purchases);
+	}
+	
 	private Purchases PurchasesDto(PurchasesDto purchasesDto, Company company) {
 		
 		return Purchases.builder()
@@ -53,6 +68,15 @@ public class PurchasesService {
 				.totalPrice(0)
 				.enabled(true)
 				.company(company)
+				.build();
+	}
+	
+	private PurchasesDto mapToDto(Purchases purchases) {
+		
+		return PurchasesDto.builder()
+				.id(purchases.getPurchasesId())
+				.description(purchases.getDescription())
+				.id_company(purchases.getCompany().getCompanyId())
 				.build();
 	}
 	
@@ -74,25 +98,6 @@ public class PurchasesService {
 		
 		purchasesRepository.save(purchases);
 	}
-	
-//	@Transactional
-//	public void updateTotalPrice (Long IdPurchases, Double totalPrice, Operations operations) {
-//		
-//		Purchases purchases = purchasesRepository.findById(IdPurchases)
-//				.orElseThrow(() -> new SpringInventoryException("La compra no fue encontrado con el siguiente codigo " + IdPurchases));
-//
-//		if(ADD.equals(operations)) {
-//			
-//			purchases.setTotalPrice(purchases.getTotalPrice() + totalPrice);
-//	
-//		}
-//		else if(SUBTRACT.equals(operations)) {
-//			
-//			purchases.setTotalPrice(purchases.getTotalPrice() - totalPrice);
-//		}
-//		
-//		purchasesRepository.save(purchases);
-//	}
 	
 	@Transactional
 	public void updateTotalPrice (BigInteger IdPurchases, Double totalPrice) {
