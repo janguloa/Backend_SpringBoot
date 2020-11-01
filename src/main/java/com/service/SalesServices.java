@@ -1,6 +1,10 @@
 package com.service;
 
 import java.time.Instant;
+import java.util.List;
+import static java.util.stream.Collectors.toList;
+
+import java.math.BigInteger;
 
 import javax.transaction.Transactional;
 
@@ -61,6 +65,20 @@ public class SalesServices {
 		return salesDto;
 	}
 	
+	public List<SalesDto> getAllSales(){
+		
+		return salesRepository.findAll().stream().map(this::mapToDto).collect(toList());
+	}
+	
+	public SalesDto getSalesById(BigInteger id) {
+		
+		Sales sales = salesRepository.findById(id)
+				.orElseThrow(() -> new SpringInventoryException("Producto no encontrada con el código " + id));
+		
+		return mapToDto(sales);
+		
+	}
+	
 	private Sales mapToSales(SalesDto salesDto, Company company, Products products, Customer customer) {
 		
 		return Sales.builder()
@@ -73,6 +91,20 @@ public class SalesServices {
 				.products(products)
 				.customer(customer)
 				.enabled(true)
+				.build();
+	}
+	
+	private SalesDto mapToDto(Sales sales) {
+		
+		return SalesDto.builder()
+				.id(sales.getSalesId())
+				.receipt(sales.getReceipt())
+				.quantity(sales.getQuantity())
+				.unitaryPrice(sales.getUnitaryPrice())
+				.totalprice(sales.getTotalprice())
+				.id_company(sales.getCompany().getCompanyId())
+				.id_customer(sales.getCustomer().getCustomerId())
+				.id_product(sales.getProducts().getProductId())
 				.build();
 	}
 	

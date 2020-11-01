@@ -1,16 +1,19 @@
 package com.controller;
 
+import static org.springframework.http.ResponseEntity.status;
+
 import java.math.BigInteger;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dto.ProductsDto;
 import com.dto.SalesDto;
 import com.service.SalesServices;
 
@@ -40,5 +43,17 @@ public class SalesController {
 		salesServices.cancel(salesDto);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping
+	public ResponseEntity <List<SalesDto>> getAllSales(){
+		
+		return status(HttpStatus.OK).body(salesServices.getAllSales());
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity <SalesDto> getSalesbyId(@PathVariable BigInteger id){
+		
+		return status(HttpStatus.OK).body(salesServices.getSalesById(id));
 	}
 }
